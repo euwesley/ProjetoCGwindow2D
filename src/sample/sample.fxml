@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints maxWidth="500.0" minWidth="0.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <Pane prefHeight="600.0" prefWidth="830.0" style="-fx-background-color: cornsilk; -fx-border-color: #808080;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <Button layoutX="155.0" layoutY="292.0" mnemonicParsing="false" onAction="#iniciaPoligono" prefHeight="25.0" prefWidth="45.0" text="Up" />
+            <Label layoutX="8.0" layoutY="493.0" text="VpX" />
+            <Label layoutX="8.0" layoutY="510.0" text="VpY" />
+            <Label fx:id="lblX" layoutX="34.0" layoutY="493.0" text="Label" textFill="RED" />
+            <Label fx:id="lblY" layoutX="34.0" layoutY="510.0" text="Label" textFill="RED" />
+            <BorderPane layoutX="264.0" layoutY="40.0" prefHeight="500.0" prefWidth="500.0" style="-fx-border-color: #808080;">
+               <center>
+                  <Canvas fx:id="canvasFx" height="500.0" onMouseExited="#outCanvas" onMouseMoved="#monitoraMouse" width="500.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+            <Button layoutX="154.0" layoutY="339.0" mnemonicParsing="false" onAction="#iniciaPoligono" prefHeight="25.0" prefWidth="47.0" text="Down" />
+            <Button layoutX="201.0" layoutY="314.0" mnemonicParsing="false" onAction="#iniciaPoligono" prefHeight="25.0" prefWidth="45.0" text="Right" />
+            <Button layoutX="108.0" layoutY="314.0" mnemonicParsing="false" onAction="#iniciaPoligono" prefHeight="25.0" prefWidth="45.0" text="Left" />
+            <Accordion layoutX="7.0" layoutY="14.0">
+              <panes>
+                <TitledPane animated="false" prefHeight="330.0" prefWidth="221.0" text="Poligonos">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="245.0" prefWidth="219.0">
+                           <children>
+                              <Button layoutX="163.0" layoutY="14.0" mnemonicParsing="false" onAction="#iniciaPoligono" text="Criar" />
+                              <StackPane fx:id="plStack" layoutX="10.0" layoutY="46.0" prefHeight="244.0" prefWidth="200.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
+                <TitledPane animated="false" prefHeight="142.0" prefWidth="221.0" text="Janela Mundo">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="txtXmin" layoutY="25.0" prefHeight="25.0" prefWidth="55.0" text="-250" />
+                              <Label layoutX="12.0" layoutY="8.0" text="X min" />
+                              <Label layoutX="75.0" layoutY="8.0" text="Y min" />
+                              <TextField fx:id="txtXmax" layoutY="67.0" prefHeight="25.0" prefWidth="55.0" text="250" />
+                              <TextField fx:id="txtYmax" layoutX="62.0" layoutY="67.0" prefHeight="25.0" prefWidth="55.0" text="250" />
+                              <Label layoutX="74.0" layoutY="50.0" text="Y max" />
+                              <Label layoutX="11.0" layoutY="50.0" text="X max" />
+                              <TextField fx:id="txtYmin" layoutX="62.0" layoutY="25.0" prefHeight="25.0" prefWidth="55.0" text="-250" />
+                              <Button layoutX="136.0" layoutY="38.0" mnemonicParsing="false" onAction="#createMundo" prefHeight="25.0" prefWidth="55.0" text="Create" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+            <Label fx:id="lblY2" layoutX="157.0" layoutY="510.0" text="Label" textFill="BLUE" />
+            <Label fx:id="lblX2" layoutX="157.0" layoutY="493.0" text="Label" textFill="BLUE" />
+            <Label layoutX="108.0" layoutY="510.0" text="MundoY" />
+            <Label layoutX="108.0" layoutY="493.0" text="MundoX" />
+         </children>
+      </Pane>
+   </children>
+</GridPane>
