@@ -22,10 +22,17 @@ public class Controller {
     protected TextField txtXmin,txtXmax,txtYmin,txtYmax;
     @FXML
     protected StackPane plStack;
+    @FXML
+    protected RadioButton rb1,rb2;
 
     Janela mundo = null,Vp = null;
     Poligono poligono = null;
     DisplayFile displayFile = null;
+
+
+    public void inicioPrograma(){
+              this.desenhaBorda();
+    }
 
     public void desenhaBorda() {
         canvasFx.getGraphicsContext2D().strokeLine(250, 0, 250, 500);
@@ -68,11 +75,12 @@ public class Controller {
                   poligono.gravaPonto2D(poligono.getListaPontos().get(0));
                   displayFile.gravaPoligono(poligono);
                   mostraPoligonos();
-                  poligono.desenhaCanvas(canvasFx,mundo,Vp);
+                  poligono.desenhaCanvas(canvasFx,mundo,Vp,3);
                   poligono = new Poligono(new LinkedList<Ponto2D>());
               }else{
-               poligono.gravaPonto2D(new Ponto2D(xVpMundo((int) event.getX()), yVpMundo((int) event.getY())));
-                  poligono.desenhaCanvas(canvasFx,mundo,Vp);
+                  poligono.gravaPonto2D(new Ponto2D(xVpMundo((int) event.getX()), yVpMundo((int) event.getY())));
+                  poligono.desenhaCanvas(canvasFx, mundo, Vp,3);
+
               }
            }
        });
@@ -126,6 +134,6 @@ public class Controller {
     public void createMundo(){
          this.mundo = new Janela(Double.valueOf(txtXmin.getText()),Double.valueOf(txtXmax.getText()),Double.valueOf(txtYmin.getText()),Double.valueOf(txtYmax.getText()));
          this.Vp = new Janela(0,Double.valueOf(canvasFx.getWidth()),0,Double.valueOf(canvasFx.getHeight()));
-         this.desenhaBorda();
+        // this.desenhaBorda();
     }
 }

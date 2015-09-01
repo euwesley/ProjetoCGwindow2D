@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +41,13 @@ public class Poligono {
             case 2:
                 for (int i = 0; i < poligono.size() - 1; i++) {
                     dda(poligono.get(i).xMundoVp(mundo, vP), poligono.get(i).yMundoVp(mundo, vP), poligono.get(i + 1).xMundoVp(mundo, vP),
-                            poligono.get(i + 1).yMundoVp(mundo, vP),canvasFx);
+                            poligono.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
+                }
+                break;
+            case 3:
+                for (int i = 0; i < poligono.size() - 1; i++) {
+                    bresenham(poligono.get(i).xMundoVp(mundo, vP), poligono.get(i).yMundoVp(mundo, vP), poligono.get(i + 1).xMundoVp(mundo, vP),
+                            poligono.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
                 }
                 break;
             default:
@@ -48,80 +55,97 @@ public class Poligono {
         }
     }
 
+    public void dda(int x0, int y0, int x1, int y1, GraphicsContext draw2D)
+    {
+        int deltaX = x1 - x0;
+        int deltaY = y1 - y0;
 
-    public void dda(double x1,double y1,double x2,double y2,Canvas desenho){
-            double  x,y,erro=0, deltaX, deltaY;
-            x=x1;
-            y=y1;
-            deltaX = x2 - x1;
-            deltaY = y2 - y1;
-
-            if((Math.abs(deltaY))>=(Math.abs(deltaX)) && y1>y2 || (Math.abs(deltaY)) < (Math.abs(deltaX))&& deltaY<0){
-                x=x2;
-                y=y2;
-                deltaX = x1-x2;
-                deltaY = y1-y2;
+        draw2D.strokeLine(x0, y0, x1, y1);
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            float m = (float) deltaY / (float) deltaX;
+            float b = y0 - m*x0;
+            if(deltaX<0)
+                deltaX =  -1;
+            else
+                deltaX =  1;
+            while (x0 != x1) {
+                x0 += deltaX;
+                y0 = Math.round(m*x0 + b);
+                draw2D.strokeLine(x0, y0, x1, y1);
             }
-            desenho.getGraphicsContext2D().strokeLine(x1,y1,x1,y1);
-            if(deltaX>=0){
-                if(Math.abs(deltaX)>=Math.abs(deltaY)){
-                    for(int i=1;i<Math.abs(deltaX);i++){
-                        if(erro<0){
-                            x++;
-                            desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                            erro += deltaY;
-                        }else {
-                            x++;
-                            y++;
-                            desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                           erro += deltaY-deltaX;
-                        }
-                    }
-                }else{
-                    for(int i=1;i<Math.abs(deltaY);i++){
-                        if(erro<0){
-                            x++;
-                            y++;
-                            desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                            erro += deltaY-deltaX;
-                        }else {
-                            y++;
-                            desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                            erro += deltaX;
-                        }
-                    }
-                }
-            }else if (deltaX == Math.abs(deltaY)){
-                for(int i=1;i<Math.abs(deltaX);i++){
-                    if(erro<0){
-                        x--;
-                        desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                        erro += deltaY;
-                    }else {
-                        x--;
-                        y++;
-                        desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                        erro += deltaY+deltaX;
-                    }
-                }
-            }else{
-                for(int i=1;i<Math.abs(deltaY);i++){
-                    if(erro<0){
-                        x--;
-                        y++;
-                        desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                        erro += deltaY+deltaX;
-                    }else {
-                        y++;
-                        desenho.getGraphicsContext2D().strokeLine(x,y,x,y);
-                        erro += deltaX;
-                    }
-                }
+        } else
+        if (deltaY != 0) {
+            float m = (float) deltaX / (float) deltaY;
+            float b = x0 - m*y0;
+            if(deltaY<0)
+                deltaY =  -1;
+            else
+                deltaY =  1;
+            while (y0 != y1) {
+                y0 += deltaY;
+                x0 = Math.round(m*y0 + b);
+                draw2D.strokeLine( x0, y0, x0, y0);
             }
-            desenho.getGraphicsContext2D().strokeLine(x2, y2, x2, y2);
+        }
     }
-    public void bresenham(){
 
+    public void bresenham(int x0, int y0, int x1, int y1,GraphicsContext draw2D) {
+        int x, y, deltaX, deltaY, p, incE, incNE, stepx, stepy;
+        deltaX = (x1 - x0);
+        deltaY = (y1 - y0);
+
+         if (deltaY < 0) {
+            deltaY = -deltaY;
+            stepy = -1;
+        }
+        else {
+            stepy = 1;
+        }
+
+        if (deltaX < 0) {
+            deltaX = -deltaX;
+            stepx = -1;
+        }
+        else {
+            stepx = 1;
+        }
+
+        x = x0;
+        y = y0;
+        draw2D.strokeLine(x0, y0, x0, y0);
+        if(deltaX>deltaY){
+            p = 2*deltaY - deltaX;
+            incE = 2*deltaY;
+            incNE = 2*(deltaY-deltaX);
+            while (x != x1){
+                x = x + stepx;
+                if (p < 0){
+                    p = p + incE;
+                }
+                else {
+                    y = y + stepy;
+                    p = p + incNE;
+                }
+                draw2D.strokeLine(x, y, x, y);
+            }
+        }
+        else{
+            p = 2*deltaX - deltaY;
+            incE = 2*deltaX;
+            incNE = 2*(deltaX-deltaY);
+            while (y != y1){
+                y = y + stepy;
+                if (p < 0){
+                    p = p + incE;
+                }
+                else {
+                    x = x + stepx;
+                    p = p + incNE;
+                }
+                draw2D.strokeLine(x, y, x, y);
+            }
+        }
     }
+
 
 }

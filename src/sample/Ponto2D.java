@@ -3,9 +3,10 @@ package sample;
 /**
  * Created by Wesley Anderson on 10/08/2015.
  * Implementar ( escalonamento, rotação, translação, reflexao )
+ * cluping cohen-sutherland
  */
 public class Ponto2D {
-    double cordenadaX,cordenadaY;
+  private double cordenadaX,cordenadaY;
 
     public Ponto2D(double cordenadaX, double cordenadaY) {
         this.cordenadaX = cordenadaX;
