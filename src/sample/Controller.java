@@ -19,7 +19,7 @@ public class Controller {
     @FXML
     protected Label lblX,lblY,lblX2,lblY2;
     @FXML
-    protected TextField txtXmin,txtXmax,txtYmin,txtYmax;
+    protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR;
     @FXML
     protected StackPane plStack;
     @FXML
@@ -75,15 +75,32 @@ public class Controller {
                   poligono.gravaPonto2D(poligono.getListaPontos().get(0));
                   displayFile.gravaPoligono(poligono);
                   mostraPoligonos();
-                  poligono.desenhaCanvas(canvasFx,mundo,Vp,3);
+                  poligono.desenhaCanvas(canvasFx,mundo,Vp,1);
                   poligono = new Poligono(new LinkedList<Ponto2D>());
               }else{
                   poligono.gravaPonto2D(new Ponto2D(xVpMundo((int) event.getX()), yVpMundo((int) event.getY())));
-                  poligono.desenhaCanvas(canvasFx, mundo, Vp,3);
+                  poligono.desenhaCanvas(canvasFx, mundo, Vp,1);
 
               }
            }
        });
+    }
+    public void desenhaCirculo(){
+        if(mundo!=null && Vp!=null) {
+            this.poligono = new Poligono(new LinkedList<Ponto2D>());
+            this.displayFile = new DisplayFile(new LinkedList<Poligono>());
+            this.poligono.desenhaCirculo(Double.valueOf(txtXc.getText()),Double.valueOf(txtYc.getText()),Double.valueOf(txtR.getText()),canvasFx.getGraphicsContext2D());
+            this.displayFile.gravaPoligono(poligono);
+            mostraPoligonos();
+            this.poligono.desenhaCanvas(canvasFx, mundo, Vp, 1);
+            this.poligono = new Poligono(new LinkedList<Ponto2D>());
+        }else{
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Alerta de Erro");
+            dialogoInfo.setHeaderText("Criar Janela do mundo Primeiro!");
+            dialogoInfo.showAndWait();
+        }
+
     }
     public void mostraPoligonos(){
         Image folder = new Image(getClass().getResourceAsStream("img\\folder_16.png"));
