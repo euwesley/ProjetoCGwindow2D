@@ -9,45 +9,44 @@ import java.util.List;
 /**
  * Created by Wesley Anderson on 10/08/2015.
  */
-/** Implementar DDA BRESENHAM ( replicar os metodos do ponto)
- * relação entre dois pontos com cohen da classe ponto para verificar o quadrante**/
+/** relação entre dois pontos com cohen da classe ponto para verificar o quadrante**/
 public class Poligono {
-    List<Ponto2D> poligono;
+    List<Ponto2D> listaDePontos;
 
     public Poligono(List ponto2D) {
-        this.poligono = ponto2D;
+        this.listaDePontos = ponto2D;
     }
 
 
     public void gravaPonto2D(Ponto2D pColetado){
-        poligono.add(pColetado);
+        listaDePontos.add(pColetado);
     }
 
     public List<Ponto2D> getListaPontos() {
-        return poligono;
+        return listaDePontos;
     }
     public void clearList(){
-        this.poligono.clear();
+        this.listaDePontos.clear();
     }
 
     public void desenhaCanvas(Canvas canvasFx, Janela mundo,Janela vP,int tipoReta) {
         switch (tipoReta) {
             case 1:
-                for (int i = 0; i < poligono.size() - 1; i++) {
-                    canvasFx.getGraphicsContext2D().strokeLine(poligono.get(i).xMundoVp(mundo, vP), poligono.get(i).yMundoVp(mundo, vP), poligono.get(i + 1).xMundoVp(mundo, vP),
-                            poligono.get(i + 1).yMundoVp(mundo, vP));
+                for (int i = 0; i < listaDePontos.size() - 1; i++) {
+                    canvasFx.getGraphicsContext2D().strokeLine(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
+                            listaDePontos.get(i + 1).yMundoVp(mundo, vP));
                 }
                 break;
             case 2:
-                for (int i = 0; i < poligono.size() - 1; i++) {
-                    dda(poligono.get(i).xMundoVp(mundo, vP), poligono.get(i).yMundoVp(mundo, vP), poligono.get(i + 1).xMundoVp(mundo, vP),
-                            poligono.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
+                for (int i = 0; i < listaDePontos.size() - 1; i++) {
+                    dda(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
+                            listaDePontos.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
                 }
                 break;
             case 3:
-                for (int i = 0; i < poligono.size() - 1; i++) {
-                    bresenham(poligono.get(i).xMundoVp(mundo, vP), poligono.get(i).yMundoVp(mundo, vP), poligono.get(i + 1).xMundoVp(mundo, vP),
-                            poligono.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
+                for (int i = 0; i < listaDePontos.size() - 1; i++) {
+                    bresenham(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
+                            listaDePontos.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
                 }
                 break;
             default:
@@ -146,6 +145,40 @@ public class Poligono {
             }
         }
     }
+
+    public void desenhaCirculo(double Xc,double Xy, double r,GraphicsContext draw2D){
+        double x=0,y=r,p;
+        this.gravaPonto2D(new Ponto2D(Xc,Xy));
+        this.gravaPonto2D(new Ponto2D(x,y));
+        p = 1 - r;
+        while(x<y){
+            if(p<0){
+                x++;
+            }else {
+                x++;
+                y--;
+            }
+            if(p<0){
+                p += 2*x+1;
+            }else{
+                p += 2*(x-y)+1;
+            }
+            this.gravaPonto2D(new Ponto2D(x,y));
+        }
+
+    }
+
+    public Ponto2D getCentro() {
+        double cX = 0, cY = 0;
+        for (int i=0;i < this.listaDePontos.size();i++) {
+            cX += this.listaDePontos.get(i).getCordenadaX();
+            cY += this.listaDePontos.get(i).getCordenadaY();
+        }
+        cX /= this.listaDePontos.size();
+        cY /= this.listaDePontos.size();
+        return new Ponto2D(cX, cY);
+    }
+
 
 
 }

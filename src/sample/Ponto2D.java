@@ -39,4 +39,5 @@ public class Ponto2D {
         return (int) ((1-(getCordenadaY()-mundo.getCordYMin())/(mundo.getCordYMax()-mundo.getCordYMin()))*(Vp.getCordYMax() -
                 Vp.getCordYMin())+ Vp.getCordYMin());
     }
+
 }
