@@ -85,15 +85,11 @@ public class Controller {
            }
        });
     }
-    public void desenhaCirculo(){
+    public void iniciaCirculo(){
         if(mundo!=null && Vp!=null) {
             this.poligono = new Poligono(new LinkedList<Ponto2D>());
             this.displayFile = new DisplayFile(new LinkedList<Poligono>());
-            this.poligono.desenhaCirculo(Double.valueOf(txtXc.getText()),Double.valueOf(txtYc.getText()),Double.valueOf(txtR.getText()),canvasFx.getGraphicsContext2D());
-            this.displayFile.gravaPoligono(poligono);
-            mostraPoligonos();
-            this.poligono.desenhaCanvas(canvasFx, mundo, Vp, 1);
-            this.poligono = new Poligono(new LinkedList<Ponto2D>());
+            desenhaCirculo();
         }else{
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
             dialogoInfo.setTitle("Alerta de Erro");
@@ -101,6 +97,13 @@ public class Controller {
             dialogoInfo.showAndWait();
         }
 
+    }
+    public void desenhaCirculo(){
+            this.poligono.criaPontosCirculo(Double.valueOf(txtR.getText()));
+            this.displayFile.gravaPoligono(poligono);
+            this.poligono.desenhaCirculo(new Ponto2D(Double.valueOf(txtXc.getText()), Double.valueOf(txtYc.getText())), mundo, Vp, canvasFx.getGraphicsContext2D());
+            mostraPoligonos();
+            this.poligono = new Poligono(new LinkedList<Ponto2D>());
     }
     public void mostraPoligonos(){
         Image folder = new Image(getClass().getResourceAsStream("img\\folder_16.png"));

@@ -145,10 +145,19 @@ public class Poligono {
             }
         }
     }
-
-    public void desenhaCirculo(double Xc,double Xy, double r,GraphicsContext draw2D){
+    public void desenhaCirculo(Ponto2D centro,Janela mundo,Janela vP,GraphicsContext draw2D){
+        double x , y,xc=centro.getCordenadaX(),yc=centro.getCordenadaY();
+        for(int i=0;i<this.listaDePontos.size();i++){
+            x=this.listaDePontos.get(i).getCordenadaX();
+            y=this.listaDePontos.get(i).getCordenadaY();
+            this.listaDePontos.get(i).setCordenadaX((x+xc));
+            this.listaDePontos.get(i).setCordenadaY((y+yc));
+            draw2D.strokeOval(this.listaDePontos.get(i).xMundoVp(mundo,vP),this.listaDePontos.get(i).yMundoVp(mundo,vP),1,1);
+        }
+    }
+    public void criaPontosCirculo(double r){
         double x=0,y=r,p;
-        this.gravaPonto2D(new Ponto2D(Xc,Xy));
+        //this.gravaPonto2D(new Ponto2D(Xc,Yc));
         this.gravaPonto2D(new Ponto2D(x,y));
         p = 1 - r;
         while(x<y){
@@ -164,6 +173,13 @@ public class Poligono {
                 p += 2*(x-y)+1;
             }
             this.gravaPonto2D(new Ponto2D(x,y));
+            this.gravaPonto2D(new Ponto2D(-x,y));
+            this.gravaPonto2D(new Ponto2D(-y,x));
+            this.gravaPonto2D(new Ponto2D(-y,-x));
+            this.gravaPonto2D(new Ponto2D(-x,-y));
+            this.gravaPonto2D(new Ponto2D(x,-y));
+            this.gravaPonto2D(new Ponto2D(y,x));
+            this.gravaPonto2D(new Ponto2D(y,-x));
         }
 
     }

@@ -110,7 +110,7 @@
                                     <Label layoutX="98.0" layoutY="6.0" text="Raio da circunferencia" />
                                     <TextField fx:id="txtR" layoutX="116.0" layoutY="23.0" prefHeight="25.0" prefWidth="41.0" />
                                     <Label layoutX="105.0" layoutY="27.0" text="r" />
-                                    <Button layoutX="201.0" layoutY="38.0" mnemonicParsing="false" onAction="#desenhaCirculo" text="Gerar" />
+                                    <Button layoutX="201.0" layoutY="38.0" mnemonicParsing="false" onAction="#iniciaCirculo" text="Gerar" />
                                  </children>
                               </AnchorPane>
                           </content>
