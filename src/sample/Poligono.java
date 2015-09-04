@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Wesley Anderson on 10/08/2015.
  */
-/** relação entre dois pontos com cohen da classe ponto para verificar o quadrante**/
+/** relaï¿½ï¿½o entre dois pontos com cohen da classe ponto para verificar o quadrante**/
 public class Poligono {
     List<Ponto2D> listaDePontos;
 
@@ -185,6 +185,7 @@ public class Poligono {
     }
 
     public Ponto2D getCentro() {
+        //teste ro
         double cX = 0, cY = 0;
         for (int i=0;i < this.listaDePontos.size();i++) {
             cX += this.listaDePontos.get(i).getCordenadaX();
