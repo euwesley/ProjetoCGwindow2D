@@ -39,5 +39,23 @@ public class Ponto2D {
         return (int) ((1-(getCordenadaY()-mundo.getCordYMin())/(mundo.getCordYMax()-mundo.getCordYMin()))*(Vp.getCordYMax() -
                 Vp.getCordYMin())+ Vp.getCordYMin());
     }
+    public void pontoTransladado(double dx,double dy){
+        this.setCordenadaX(getCordenadaX()+dx);
+        this.setCordenadaY(getCordenadaY()+dy);
+    }
+    public void pontoEscalonado(double sx,double sy){
+        this.setCordenadaX(getCordenadaX()*sx);
+        this.setCordenadaY(getCordenadaY()*sy);
+    }
+    public void pontoRotacionado(double angulo){
+        this.setCordenadaX((getCordenadaX()*Math.cos(angulo))-(getCordenadaY()*Math.sin(angulo)));
+        this.setCordenadaY((getCordenadaX()*Math.cos(angulo))+(getCordenadaY()*Math.sin(angulo)));
+    }
+    public void pontoRefletidoX(){
+        this.setCordenadaX(-getCordenadaX());
+    }
+    public void pontoRefletidoY(){
+        this.setCordenadaY(-getCordenadaY());
+    }
 
 }

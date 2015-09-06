@@ -196,6 +196,31 @@ public class Poligono {
         return new Ponto2D(cX, cY);
     }
 
+    public void transladarPoligono(double dx,double dy){
+        for(int i=0;i<this.listaDePontos.size();i++){
+            this.listaDePontos.get(i).pontoTransladado(dx,dy);
+        }
+    }
+    public void escalonarPoligono(double dx,double dy){
+        for(int i=0;i<this.listaDePontos.size();i++){
+            this.listaDePontos.get(i).pontoEscalonado(dx, dy);
+        }
+    }
+    public void rotacionarPoligono(double angulo){
+        for(int i=0;i<this.listaDePontos.size();i++){
+            this.listaDePontos.get(i).pontoRotacionado(angulo);
+        }
+    }
+    public void refletirPontosX(){
+        for(int i=0;i<this.listaDePontos.size();i++){
+            this.listaDePontos.get(i).pontoRefletidoX();
+        }
+    }
+    public void refletirPontosY(){
+        for(int i=0;i<this.listaDePontos.size();i++){
+            this.listaDePontos.get(i).pontoRefletidoY();
+        }
+    }
 
 
 }
