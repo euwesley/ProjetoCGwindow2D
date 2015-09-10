@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import sun.rmi.server.InactiveGroupException;
 
 import java.util.LinkedList;
 
@@ -19,28 +20,43 @@ public class Controller {
     @FXML
     protected Label lblX,lblY,lblX2,lblY2;
     @FXML
-    protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR;
+    protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR,txtAngulo,txtEscY,txtEscX;
+    @FXML
+    protected TextField txtMovY,txtMovX;
     @FXML
     protected StackPane plStack;
     @FXML
-    protected RadioButton rb1,rb2;
+    protected ToggleGroup rbGroup;
 
     Janela mundo = null,Vp = null;
     Poligono poligono = null;
     DisplayFile displayFile = null;
-
+    TreeView<String> tree ;
+    RadioButton radioButton;
 
     public void inicioPrograma(){
-              this.desenhaBorda();
+        canvasFx.getGraphicsContext2D().strokeLine(250, 0, 250, 500);
+        canvasFx.getGraphicsContext2D().strokeLine(0, 250, 500, 250);
     }
-
+    public String algoritimoDesenho(){
+        radioButton = (RadioButton)rbGroup.getSelectedToggle();
+        return radioButton.getId();
+    }
+    public Integer poligonoSelecionado(){
+        String id[]= String.valueOf(tree.getSelectionModel().getSelectedItem().getValue()).split(" ");
+        return Integer.valueOf(id[1]);
+    }
     public void desenhaBorda() {
+        canvasFx.getGraphicsContext2D().clearRect(0,0,500,500);
         canvasFx.getGraphicsContext2D().strokeLine(250, 0, 250, 500);
         canvasFx.getGraphicsContext2D().strokeLine(0, 250, 500, 250);
 
     }
+    public void desenhaPoligono(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).desenhaCanvas(canvasFx, mundo, Vp, algoritimoDesenho());
+    }
 
-    public void monitoraMouse(){
+    public void monitoraMouse() {
         canvasFx.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -68,19 +84,19 @@ public class Controller {
 
     }
     public void coletaPontos2D(){
-       canvasFx.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        canvasFx.setOnMouseReleased(new EventHandler<MouseEvent>() {
            @Override
            public void handle(MouseEvent event) {
+
               if(event.getButton()== MouseButton.SECONDARY){
-                  poligono.gravaPonto2D(poligono.getListaPontos().get(0));
+                  poligono.gravaPonto2D(new Ponto2D(poligono.getListaPontos().get(0).getCordenadaX(),poligono.getListaPontos().get(0).getCordenadaY()));
                   displayFile.gravaPoligono(poligono);
                   mostraPoligonos();
-                  poligono.desenhaCanvas(canvasFx,mundo,Vp,1);
+                  poligono.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
                   poligono = new Poligono(new LinkedList<Ponto2D>());
               }else{
                   poligono.gravaPonto2D(new Ponto2D(xVpMundo((int) event.getX()), yVpMundo((int) event.getY())));
-                  poligono.desenhaCanvas(canvasFx, mundo, Vp,1);
-
+                  poligono.desenhaCanvas(canvasFx, mundo, Vp,algoritimoDesenho());
               }
            }
        });
@@ -108,43 +124,28 @@ public class Controller {
     public void mostraPoligonos(){
         Image folder = new Image(getClass().getResourceAsStream("img\\folder_16.png"));
         ImageView rootIcon = new ImageView(folder);
-        TreeItem<String> rootItem = new TreeItem<String> ("Poligonos",rootIcon);
+        TreeItem<String> rootItem = new TreeItem<String>("Poligonos",rootIcon);
         rootItem.setExpanded(true);
 
         for (int i = 0; i < displayFile.getListaPoligonos().size(); i++) {
-            TreeItem<String> item = new TreeItem<String> ("Poligono " + i);
+            TreeItem<String> item = new TreeItem<String>("Poligono " + i);
             rootItem.getChildren().add(item);
             int o = displayFile.getListaPoligonos().get(i).getListaPontos().size();
-            for (int j = 0;j < o;j++){
-                TreeItem<String> folhas = new TreeItem<String> ("X " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaX() +" Y "+displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaY());
+            for (int j = 0; j < o; j++) {
+                TreeItem<String> folhas = new TreeItem<String>("X " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaX() + " Y " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaY());
                 rootItem.getChildren().get(i).getChildren().add(folhas);
             }
         }
-        TreeView<String> tree = new TreeView<String> (rootItem);
+        tree = new TreeView<String> (rootItem);
         plStack.getChildren().add(tree);
-        treeDesenha();
 
-    }
-    public void treeDesenha(){
-        ContextMenu menuEsquerdo = new ContextMenu();
-        MenuItem addMenuItem = new MenuItem("Desenhar");
-        menuEsquerdo.getItems().add(addMenuItem);
-        addMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
-                dialogoInfo.setTitle("Alerta de Erro");
-                dialogoInfo.setHeaderText("Programar");
-                dialogoInfo.showAndWait();
-            }
-        });
     }
 
     public double xVpMundo(int x){
         return ((x-Vp.getCordXMin())/(Vp.getCordXMax()-Vp.getCordXMin()))*(mundo.getCordXMax() - mundo.getCordXMin())+ mundo.getCordXMin();
     }
     public double yVpMundo(int y){
-        return (1-(y-Vp.getCordYMin())/(Vp.getCordYMax()-Vp.getCordYMin()))*(mundo.getCordYMax() - mundo.getCordYMin())+ mundo.getCordYMin();
+        return (1-(y-Vp.getCordYMin())/ (Vp.getCordYMax()-Vp.getCordYMin()))*(mundo.getCordYMax() - mundo.getCordYMin())+ mundo.getCordYMin();
     }
 
     public void outCanvas(){
@@ -155,5 +156,31 @@ public class Controller {
          this.mundo = new Janela(Double.valueOf(txtXmin.getText()),Double.valueOf(txtXmax.getText()),Double.valueOf(txtYmin.getText()),Double.valueOf(txtYmax.getText()));
          this.Vp = new Janela(0,Double.valueOf(canvasFx.getWidth()),0,Double.valueOf(canvasFx.getHeight()));
         // this.desenhaBorda();
+    }
+    public void refletirX(){
+
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).refletirPontosX();
+        desenhaBorda();
+        desenhaPoligono();
+    }
+    public void refletirY(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).refletirPontosY();
+        desenhaBorda();
+        desenhaPoligono();
+    }
+    public void rotacionar(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).rotacionarPoligono(Double.valueOf(txtAngulo.getText()));
+        desenhaBorda();
+        desenhaPoligono();
+    }
+    public void escalonar(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).escalonarPoligono(Double.valueOf(txtEscX.getText()), Double.valueOf(txtEscY.getText()));
+        desenhaBorda();
+        desenhaPoligono();
+    }
+    public void mover(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).transladarPoligono(Double.valueOf(txtMovX.getText()), Double.valueOf(txtMovY.getText()));
+        desenhaBorda();
+        desenhaPoligono();
     }
 }

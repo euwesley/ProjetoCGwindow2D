@@ -29,21 +29,21 @@ public class Poligono {
         this.listaDePontos.clear();
     }
 
-    public void desenhaCanvas(Canvas canvasFx, Janela mundo,Janela vP,int tipoReta) {
+    public void desenhaCanvas(Canvas canvasFx, Janela mundo,Janela vP,String tipoReta) {
         switch (tipoReta) {
-            case 1:
+            case "rb1":
                 for (int i = 0; i < listaDePontos.size() - 1; i++) {
                     canvasFx.getGraphicsContext2D().strokeLine(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
                             listaDePontos.get(i + 1).yMundoVp(mundo, vP));
                 }
                 break;
-            case 2:
+            case "rb2":
                 for (int i = 0; i < listaDePontos.size() - 1; i++) {
                     dda(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
                             listaDePontos.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());
                 }
                 break;
-            case 3:
+            case "rb3":
                 for (int i = 0; i < listaDePontos.size() - 1; i++) {
                     bresenham(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
                             listaDePontos.get(i + 1).yMundoVp(mundo, vP), canvasFx.getGraphicsContext2D());

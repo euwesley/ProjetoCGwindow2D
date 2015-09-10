@@ -70,7 +70,7 @@
                                  <children>
                                     <Label layoutX="14.0" layoutY="14.0" text="Ângulo" />
                                     <TextField fx:id="txtAngulo" layoutX="60.0" layoutY="10.0" prefHeight="25.0" prefWidth="94.0" text="45" />
-                                    <Button layoutX="166.0" layoutY="10.0" mnemonicParsing="false" text="Rotate" />
+                                    <Button layoutX="166.0" layoutY="10.0" mnemonicParsing="false" onAction="#rotacionar" text="Rotate" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -79,23 +79,34 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #a0a0a0;">
                                  <children>
-                                    <TextField fx:id="txtEscX" layoutX="28.0" layoutY="10.0" prefHeight="25.0" prefWidth="45.0" />
+                                    <TextField fx:id="txtEscX" layoutX="28.0" layoutY="10.0" prefHeight="25.0" prefWidth="45.0" text="0.5" />
                                     <Label layoutX="14.0" layoutY="14.0" text="X" />
-                                    <TextField fx:id="txtEscY" layoutX="114.0" layoutY="10.0" prefHeight="25.0" prefWidth="45.0" />
+                                    <TextField fx:id="txtEscY" layoutX="114.0" layoutY="10.0" prefHeight="25.0" prefWidth="45.0" text="0.5" />
                                     <Label layoutX="101.0" layoutY="14.0" text="Y" />
-                                    <Button layoutX="193.0" layoutY="10.0" mnemonicParsing="false" text="Escalonar" />
+                                    <Button layoutX="193.0" layoutY="10.0" mnemonicParsing="false" onAction="#escalonar" text="Escalonar" />
                                  </children>
                               </AnchorPane>
                         </content>
                       </Tab>
                         <Tab text="Mover">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #a0a0a0;" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #a0a0a0;">
+                                 <children>
+                                    <Button layoutX="202.0" layoutY="17.0" mnemonicParsing="false" onAction="#mover" text="Mover" />
+                                    <Label layoutX="14.0" layoutY="21.0" text="X" />
+                                    <Label layoutX="105.0" layoutY="21.0" text="Y" />
+                                    <TextField fx:id="txtMovX" layoutX="31.0" layoutY="17.0" prefHeight="25.0" prefWidth="46.0" text="0" />
+                                    <TextField fx:id="txtMovY" layoutX="120.0" layoutY="17.0" prefHeight="25.0" prefWidth="46.0" text="0" />
+                                 </children></AnchorPane>
                           </content>
                         </Tab>
                         <Tab text="Reflexão">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #a0a0a0;" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #a0a0a0;">
+                                 <children>
+                                    <Button layoutX="29.0" layoutY="14.0" mnemonicParsing="false" onAction="#refletirX" text="eixo X" />
+                                    <Button layoutX="108.0" layoutY="14.0" mnemonicParsing="false" onAction="#refletirY" text="eixo Y" />
+                                 </children></AnchorPane>
                           </content>
                         </Tab>
                         <Tab text="Circulo">
@@ -104,11 +115,11 @@
                                  <children>
                                     <Label layoutX="15.0" layoutY="6.0" text="Ponto" />
                                     <Label layoutX="22.0" layoutY="27.0" text="Xc" />
-                                    <TextField fx:id="txtXc" layoutX="41.0" layoutY="23.0" prefHeight="25.0" prefWidth="32.0" />
-                                    <TextField fx:id="txtYc" layoutX="41.0" layoutY="50.0" prefHeight="25.0" prefWidth="32.0" />
+                                    <TextField fx:id="txtXc" layoutX="41.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" />
+                                    <TextField fx:id="txtYc" layoutX="41.0" layoutY="50.0" prefHeight="25.0" prefWidth="45.0" />
                                     <Label layoutX="22.0" layoutY="54.0" text="Yc" />
                                     <Label layoutX="98.0" layoutY="6.0" text="Raio da circunferencia" />
-                                    <TextField fx:id="txtR" layoutX="116.0" layoutY="23.0" prefHeight="25.0" prefWidth="41.0" />
+                                    <TextField fx:id="txtR" layoutX="116.0" layoutY="23.0" prefHeight="25.0" prefWidth="45.0" />
                                     <Label layoutX="105.0" layoutY="27.0" text="r" />
                                     <Button layoutX="201.0" layoutY="38.0" mnemonicParsing="false" onAction="#iniciaCirculo" text="Gerar" />
                                  </children>
