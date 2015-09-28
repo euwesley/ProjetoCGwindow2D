@@ -11,7 +11,7 @@ import java.util.List;
  */
 /** rela��o entre dois pontos com cohen da classe ponto para verificar o quadrante**/
 public class Poligono {
-    List<Ponto2D> listaDePontos;
+   private List<Ponto2D> listaDePontos;
 
     public Poligono(List ponto2D) {
         this.listaDePontos = ponto2D;

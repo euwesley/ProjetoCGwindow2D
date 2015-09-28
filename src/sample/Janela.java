@@ -4,7 +4,8 @@ package sample;
  * Created by Wesley Anderson on 10/08/2015.
  */
 public class Janela {
-    double cordXMin,cordXMax,cordYMin,cordYMax;
+    private double cordXMin,cordXMax,cordYMin,cordYMax;
+    private int deslocamento = 5;
 
     public Janela(double cordXMin, double cordXMax, double cordYMin, double cordYMax) {
         this.cordXMin = cordXMin;
@@ -43,5 +44,22 @@ public class Janela {
 
     public void setCordYMax(double cordYMax) {
         this.cordYMax = cordYMax;
+    }
+
+    public void moverDireita(){
+        this.setCordXMin(this.getCordXMin() + deslocamento);
+        this.setCordXMax(this.getCordXMax() + deslocamento);
+    }
+    public void moverEsquerda(){
+        this.setCordXMin(this.getCordXMin() - deslocamento);
+        this.setCordXMax(this.getCordXMax() - deslocamento);
+    }
+    public void moverCima(){
+        this.setCordYMin(this.getCordYMin() + deslocamento);
+        this.setCordYMax(this.getCordYMax() + deslocamento);
+    }
+    public void moverBaixo(){
+        this.setCordYMin(this.getCordYMin() - deslocamento);
+        this.setCordYMax(this.getCordYMax() - deslocamento);
     }
 }

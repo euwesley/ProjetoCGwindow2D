@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
@@ -60,8 +61,8 @@
             <Pane layoutX="22.0" layoutY="18.0" prefHeight="390.0" prefWidth="343.0" style="-fx-border-color: Gray;">
                <children>
                   <StackPane fx:id="plStack" layoutX="15.0" layoutY="55.0" prefHeight="208.0" prefWidth="310.0" style="-fx-border-color: #d0d0d0; -fx-background-color: #d0d0d0;" />
-                  <Button layoutX="275.0" layoutY="14.0" mnemonicParsing="false" onAction="#iniciaPoligono" text="Criar" />
-                  <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Poligonos Fechado " />
+                  <Button layoutX="268.0" layoutY="14.0" mnemonicParsing="false" onAction="#iniciaPoligono" text="Criar" />
+                  <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Poligonos " />
                   <TabPane layoutX="15.0" layoutY="263.0" prefHeight="115.0" prefWidth="310.0" style="-fx-border-color: #d0d0d0;" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab text="Rotacionar">
@@ -128,9 +129,15 @@
                         </Tab>
                     </tabs>
                   </TabPane>
+                  <RadioButton fx:id="rbAberto" layoutX="24.0" layoutY="18.0" mnemonicParsing="false" selected="true" text="Aberto">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="rbPoligono" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rbFechado" layoutX="85.0" layoutY="18.0" mnemonicParsing="false" text="Fechado" toggleGroup="$rbPoligono" />
                </children>
             </Pane>
-            <Pane layoutX="377.0" layoutY="594.0" prefHeight="99.0" prefWidth="502.0" style="-fx-border-color: Gray;">
+            <Pane layoutX="21.0" layoutY="594.0" prefHeight="99.0" prefWidth="858.0" style="-fx-border-color: Gray;">
                <children>
                   <TextField fx:id="txtXmin" layoutX="60.0" layoutY="22.0" prefHeight="25.0" prefWidth="55.0" text="-250" />
                   <Label layoutX="72.0" layoutY="5.0" text="X min" />
@@ -140,10 +147,35 @@
                   <Label layoutX="134.0" layoutY="47.0" text="Y max" />
                   <Label layoutX="71.0" layoutY="47.0" text="X max" />
                   <TextField fx:id="txtYmin" layoutX="122.0" layoutY="22.0" prefHeight="25.0" prefWidth="55.0" text="-250" />
-                  <Button layoutX="196.0" layoutY="35.0" mnemonicParsing="false" onAction="#createMundo" prefHeight="25.0" prefWidth="55.0" text="Create" />
+                  <Button layoutX="196.0" layoutY="35.0" mnemonicParsing="false" onAction="#createMundo" prefHeight="25.0" prefWidth="66.0" text="Atualiza" />
                   <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Mundo " />
-                  <Slider layoutX="340.0" layoutY="40.0" />
-                  <Label layoutX="297.0" layoutY="39.0" style="-fx-background-color: cornsilk;" text="Scala" />
+                  <Slider fx:id="brScalaMundo" layoutX="334.0" layoutY="59.0" min="1.0" onMouseReleased="#scalaMundo" value="1.0" />
+                  <Label layoutX="297.0" layoutY="55.0" style="-fx-background-color: cornsilk;" text="Scala" />
+                  <ImageView fitHeight="92.0" fitWidth="140.0" layoutX="587.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/setas.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="51.0" fitWidth="43.0" layoutX="634.0" layoutY="4.0" onMouseReleased="#moveMundoSubir" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/setaCima.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.5" fitWidth="43.0" layoutX="590.0" layoutY="49.0" onMousePressed="#moveMundoEsquerda" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/setaEsquerda.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="48.5" fitWidth="43.0" layoutX="678.0" layoutY="47.5" onMouseReleased="#moveMundoDireita" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/setaDireita.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="51.0" fitWidth="43.0" layoutX="634.0" layoutY="49.0" onMouseReleased="#moveMundoBaixo" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/setaBaixo.png" />
+                     </image>
+                  </ImageView>
                </children>
             </Pane>
          </children>
