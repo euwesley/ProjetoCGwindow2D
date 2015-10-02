@@ -122,7 +122,7 @@ public class Controller {
                   poligono = new Poligono(new LinkedList<Ponto2D>());
 
               }else if(event.getButton() == MouseButton.PRIMARY){
-                      poligono.gravaPonto2D(new Ponto2D(xVpMundo((int) event.getX()), yVpMundo((int) event.getY())));
+                      poligono.gravaPonto2D(new Ponto2D((int)xVpMundo((int) event.getX()), (int)yVpMundo((int) event.getY())));
                       poligono.desenhaCanvas(canvasFx, mundo, Vp,algoritimoDesenho());
               }
            }
@@ -242,5 +242,10 @@ public class Controller {
         displayFile.getListaPoligonos().get(poligonoSelecionado()).transladarPoligono(Double.valueOf(txtMovX.getText()), Double.valueOf(txtMovY.getText()));
         desenhaBorda();
         desenhaPoligono();
+    }
+    public void casteljau(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaCasteljau();
+        desenhaBorda();
+      //  desenhaPoligono();
     }
 }

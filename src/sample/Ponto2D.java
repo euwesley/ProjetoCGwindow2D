@@ -2,7 +2,7 @@ package sample;
 
 /**
  * Created by Wesley Anderson on 10/08/2015.
- * Implementar ( escalonamento, rotação, translação, reflexao )
+ * Implementar ( escalonamento, rotaï¿½ï¿½o, translaï¿½ï¿½o, reflexao )
  * cluping cohen-sutherland
  */
 public class Ponto2D {
@@ -48,14 +48,30 @@ public class Ponto2D {
         this.setCordenadaY(getCordenadaY()*sy);
     }
     public void pontoRotacionado(double angulo){
-        this.setCordenadaX((getCordenadaX()*Math.cos(angulo))-(getCordenadaY()*Math.sin(angulo)));
-        this.setCordenadaY((getCordenadaX()*Math.cos(angulo))+(getCordenadaY()*Math.sin(angulo)));
+        //angulo = (angulo/180)*Math.PI;
+        this.setCordenadaX((getCordenadaX()*Math.cos(Math.toRadians(angulo)))-(getCordenadaY()*Math.sin(Math.toRadians(angulo))));
+        this.setCordenadaY((getCordenadaX()*Math.sin(Math.toRadians(angulo)))+(getCordenadaY()*Math.cos(Math.toRadians(angulo))));
     }
     public void pontoRefletidoX(){
         this.setCordenadaX(-getCordenadaX());
     }
     public void pontoRefletidoY(){
         this.setCordenadaY(-getCordenadaY());
+    }
+
+    public void pontoRefMatrizX(){
+        int matrizX[][] = new int[2][2];
+        matrizX[0][0] = -1;
+        matrizX[0][1] = 0;
+        matrizX[1][0] = 0;
+        matrizX[1][1] = 1;
+
+        for (int i = 0; i < 2 ; i++) {
+            for (int j = 0; j < 2 ; j++) {
+
+            }
+        }
+
     }
 
 }

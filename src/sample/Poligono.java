@@ -207,8 +207,14 @@ public class Poligono {
         }
     }
     public void rotacionarPoligono(double angulo){
+        Ponto2D medio;
+        medio = getCentro();
         for(int i=0;i<this.listaDePontos.size();i++){
+            this.listaDePontos.get(i).setCordenadaX(this.listaDePontos.get(i).getCordenadaX() - medio.getCordenadaX());
+            this.listaDePontos.get(i).setCordenadaY(this.listaDePontos.get(i).getCordenadaY() - medio.getCordenadaY());
             this.listaDePontos.get(i).pontoRotacionado(angulo);
+            this.listaDePontos.get(i).setCordenadaX(this.listaDePontos.get(i).getCordenadaX() + medio.getCordenadaX());
+            this.listaDePontos.get(i).setCordenadaY(this.listaDePontos.get(i).getCordenadaY() + medio.getCordenadaY());
         }
     }
     public void refletirPontosX(){
@@ -221,6 +227,9 @@ public class Poligono {
             this.listaDePontos.get(i).pontoRefletidoY();
         }
     }
-
+    public void curvaCasteljau(){
+        Casteljau curva = new Casteljau(getListaPontos());
+        this.listaDePontos = curva.geraListaCurva();
+    }
 
 }
