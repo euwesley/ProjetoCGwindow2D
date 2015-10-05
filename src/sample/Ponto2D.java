@@ -49,8 +49,9 @@ public class Ponto2D {
     }
     public void pontoRotacionado(double angulo){
         //angulo = (angulo/180)*Math.PI;
-        this.setCordenadaX((getCordenadaX()*Math.cos(Math.toRadians(angulo)))-(getCordenadaY()*Math.sin(Math.toRadians(angulo))));
-        this.setCordenadaY((getCordenadaX()*Math.sin(Math.toRadians(angulo)))+(getCordenadaY()*Math.cos(Math.toRadians(angulo))));
+        double x = this.getCordenadaX(),y = this.getCordenadaY();
+        this.setCordenadaX((x*Math.cos(Math.toRadians(angulo)))-(y*Math.sin(Math.toRadians(angulo))));
+        this.setCordenadaY((x*Math.sin(Math.toRadians(angulo)))+(y*Math.cos(Math.toRadians(angulo))));
     }
     public void pontoRefletidoX(){
         this.setCordenadaX(-getCordenadaX());

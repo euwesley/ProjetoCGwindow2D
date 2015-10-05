@@ -3,8 +3,7 @@ package sample;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Wesley Anderson on 10/08/2015.
@@ -25,6 +24,11 @@ public class Poligono {
     public List<Ponto2D> getListaPontos() {
         return listaDePontos;
     }
+
+    public void setListaDePontos(List<Ponto2D> listaDePontos) {
+        this.listaDePontos = listaDePontos;
+    }
+
     public void clearList(){
         this.listaDePontos.clear();
     }
@@ -227,9 +231,121 @@ public class Poligono {
             this.listaDePontos.get(i).pontoRefletidoY();
         }
     }
+
     public void curvaCasteljau(){
         Casteljau curva = new Casteljau(getListaPontos());
         this.listaDePontos = curva.geraListaCurva();
+    }
+    public Ponto2D[][] multiplicaMatriz(float a[][], Ponto2D b[][]) {
+        //Aqui calcula a matriz C, que é a multiplicacao da matrizHemite X vetorGeometrico
+        Ponto2D c[][] = new Ponto2D[a.length][b[0].length];
+
+        for (int i = 0; i < a.length; i++) { //Linha
+            Ponto2D aux = new Ponto2D(0, 0);
+            for (int j = 0; j < b[i].length; j++) { //Coluna
+                int ax = 0, ay = 0;
+                for (int x = 0; x < a[0].length; x++) {
+                    //Aqui acontece a multiplicacao
+                    ax = (int) (ax + a[i][x] * b[x][j].getCordenadaX());
+                    ay = (int) (ay + a[i][x] * b[x][j].getCordenadaY());
+                }
+                aux.setCordenadaX(ax);
+                aux.setCordenadaY(ay);
+                c[i][j] = aux;
+            }
+        }
+        return c;
+    }
+    public void curvaHermit(int t){
+      //  Ponto2D aux = new Ponto2D(0,0);
+        List<Ponto2D> listaPontosAux = new LinkedList<Ponto2D>();
+        Ponto2D p0 = getListaPontos().get(0);
+        Ponto2D p1 = getListaPontos().get(1);
+        Ponto2D p2 = getListaPontos().get(2);
+        Ponto2D p3 = getListaPontos().get(3);
+        Ponto2D r1 = new Ponto2D( (p1.getCordenadaX() - p0.getCordenadaX()) , (p1.getCordenadaY() - p0.getCordenadaY()) );
+        Ponto2D r4 = new Ponto2D( (p3.getCordenadaX() - p2.getCordenadaX()) , (p3.getCordenadaY() - p2.getCordenadaY()) );
+
+
+
+        final float matrizHemite[][] = {{2, -2, 1, 1},
+                {-3, 3, -2, -1},
+                {0, 0, 1, 0},
+                {1, 0, 0, 0}};
+        Ponto2D vetorGeometrico[][] = {{p0},
+                {p3},
+                {r1},
+                {r4}};
+        Ponto2D c[][] = multiplicaMatriz(matrizHemite, vetorGeometrico);
+        //listaPontosAux().clear();
+        float soma = (float)1/t;
+        for (float x = 0; x <= 1;x += soma) {
+            float T[][] = {{(float) Math.pow(x, 3) ,(float)  Math.pow(x, 2) , x, 1}};
+            Ponto2D pd[][] = multiplicaMatriz(T, c);
+            for (int i = 0; i < pd.length; i++) { //Linha
+                for (int j = 0; j < pd[i].length; j++) { //Coluna
+                    listaPontosAux.add(pd[i][j]);
+                }
+            }
+        }
+        this.setListaDePontos(listaPontosAux);
+    }
+    public void curvaBezier(int t){
+     //   Ponto2D aux = new Ponto2D(0,0);
+        List<Ponto2D> listaPontosAux = new LinkedList<Ponto2D>() ;
+        Ponto2D p0 = getListaPontos().get(0);
+        Ponto2D p1 = getListaPontos().get(1);
+        Ponto2D p2 = getListaPontos().get(2);
+        Ponto2D p3 = getListaPontos().get(3);
+
+        final float[][] matrizBezier = {{-1, 3, -3, 1},
+                {3, -6, 3, 0},
+                {-3, 3, 0, 0},
+                {1, 0, 0, 0}};
+        Ponto2D vetorGeometrico[][] = {{p0},
+                {p1},
+                {p2},
+                {p3}};
+        Ponto2D c[][] = multiplicaMatriz(matrizBezier, vetorGeometrico);
+
+        float soma = (float)1/t;
+        for (float x = 0; x <= 1;x += soma) {
+            float T[][] = {{(float) Math.pow(x, 3) ,(float)  Math.pow(x, 2) , x, 1}};
+            Ponto2D pd[][] = multiplicaMatriz(T, c);
+            for (int i = 0; i < pd.length; i++) { //Linha
+                for (int j = 0; j < pd[i].length; j++) { //Coluna
+                    listaPontosAux.add(pd[i][j]);
+                }
+            }
+        }
+        this.setListaDePontos(listaPontosAux);
+    }
+    public void curvaBsplines(int t){
+        List<Ponto2D> listaPontosAux = new LinkedList<Ponto2D>() ;
+        Ponto2D p0 = getListaPontos().get(0);
+        Ponto2D p1 = getListaPontos().get(1);
+        Ponto2D p2 = getListaPontos().get(2);
+        Ponto2D p3 = getListaPontos().get(3);
+        final float[][] matrizBsplines = {{(float)-1/6, (float)3/6, (float)-3/6, (float)1/6},
+                {(float)3/6, (float)-6/6, (float)3/6, 0},
+                {(float)-3/6, 0, (float)3/6, 0},
+                {(float)1/6, (float)4/6, (float)1/6, 0}};
+        Ponto2D vetorGeometrico[][] = {{p0},
+                {p1},
+                {p2},
+                {p3}};
+        Ponto2D c[][] = multiplicaMatriz(matrizBsplines, vetorGeometrico);
+        float soma = (float)1/t;
+        for (float x = 0; x <= 1;x += soma) {
+            float T[][] = {{(float) Math.pow(x, 3) ,(float)  Math.pow(x, 2) , x, 1}};
+            Ponto2D pd[][] = multiplicaMatriz(T, c);
+            for (int i = 0; i < pd.length; i++) { //Linha
+                for (int j = 0; j < pd[i].length; j++) { //Coluna
+                    listaPontosAux.add(pd[i][j]);
+                }
+            }
+        }
+        this.setListaDePontos(listaPontosAux);
     }
 
 }

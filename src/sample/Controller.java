@@ -22,7 +22,7 @@ public class Controller {
     @FXML
     protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR,txtAngulo,txtEscY,txtEscX;
     @FXML
-    protected TextField txtMovY,txtMovX;
+    protected TextField txtMovY,txtMovX,txtYreta,txtXreta,txtNPontos;
     @FXML
     protected StackPane plStack;
     @FXML
@@ -107,6 +107,25 @@ public class Controller {
         }
 
     }
+    public void pontosReta(){
+        if(this.poligono == null) {
+            //canvasFx.getGraphicsContext2D().clearRect(0, 0, canvasFx.getWidth(), canvasFx.getHeight());
+            this.poligono = new Poligono(new LinkedList<Ponto2D>());
+            this.displayFile = new DisplayFile(new LinkedList<Poligono>());
+            this.poligono.gravaPonto2D(new Ponto2D(Double.valueOf(txtXreta.getText()),Double.valueOf(txtYreta.getText())));
+            displayFile.gravaPoligono(poligono);
+            mostraPoligonos("Curva ");
+        }else{
+            this.poligono.gravaPonto2D(new Ponto2D(Double.valueOf(txtXreta.getText()),Double.valueOf(txtYreta.getText())));
+            mostraPoligonos("Curva ");
+        }
+        if(poligono.getListaPontos().size() == 4){
+            //displayFile.gravaPoligono(poligono);
+            mostraPoligonos("Curva ");
+            poligono.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+            poligono = new Poligono(new LinkedList<Ponto2D>());
+        }
+    }
     public void coletaPontos2D(){
         canvasFx.setOnMouseReleased(new EventHandler<MouseEvent>() {
            @Override
@@ -117,7 +136,7 @@ public class Controller {
                       poligono.gravaPonto2D(new Ponto2D(poligono.getListaPontos().get(0).getCordenadaX(), poligono.getListaPontos().get(0).getCordenadaY()));
                   }
                   displayFile.gravaPoligono(poligono);
-                  mostraPoligonos();
+                  mostraPoligonos("Poligono ");
                   poligono.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
                   poligono = new Poligono(new LinkedList<Ponto2D>());
 
@@ -146,25 +165,27 @@ public class Controller {
             this.poligono.criaPontosCirculo(Double.valueOf(txtR.getText()));
             this.displayFile.gravaPoligono(poligono);
             this.poligono.desenhaCirculo(new Ponto2D(Double.valueOf(txtXc.getText()), Double.valueOf(txtYc.getText())), mundo, Vp, canvasFx.getGraphicsContext2D());
-            mostraPoligonos();
+            mostraPoligonos("Curva ");
             this.poligono = new Poligono(new LinkedList<Ponto2D>());
     }
-    public void mostraPoligonos(){
+    public void mostraPoligonos(String nome){
         Image folder = new Image(getClass().getResourceAsStream("img\\folder_16.png"));
         ImageView rootIcon = new ImageView(folder);
         TreeItem<String> rootItem = new TreeItem<String>("Poligonos",rootIcon);
         rootItem.setExpanded(true);
 
         for (int i = 0; i < displayFile.getListaPoligonos().size(); i++) {
-            TreeItem<String> item = new TreeItem<String>("Poligono " + i);
+            TreeItem<String> item = new TreeItem<String>(nome + i);
             rootItem.getChildren().add(item);
             int o = displayFile.getListaPoligonos().get(i).getListaPontos().size();
             for (int j = 0; j < o; j++) {
                 TreeItem<String> folhas = new TreeItem<String>("X " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaX() + " Y " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaY());
                 rootItem.getChildren().get(i).getChildren().add(folhas);
             }
+            item.setExpanded(true);
         }
         tree = new TreeView<String> (rootItem);
+        rootItem.setExpanded(true);
         plStack.getChildren().add(tree);
 
     }
@@ -245,7 +266,22 @@ public class Controller {
     }
     public void casteljau(){
         displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaCasteljau();
+        mostraPoligonos("Curva Casteljau ");
         desenhaBorda();
-      //  desenhaPoligono();
+    }
+    public void hermit(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaHermit(Integer.valueOf(txtNPontos.getText()));
+        mostraPoligonos("Curva Hermit ");
+        desenhaBorda();
+    }
+    public void bezier(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaBezier(Integer.valueOf(txtNPontos.getText()));
+        mostraPoligonos("Curva Bezier ");
+        desenhaBorda();
+    }
+    public void bSplines(){
+        displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaBsplines(Integer.valueOf(txtNPontos.getText()));
+        mostraPoligonos("Curva bSplines ");
+        desenhaBorda();
     }
 }
