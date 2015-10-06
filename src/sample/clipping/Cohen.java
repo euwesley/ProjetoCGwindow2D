@@ -82,7 +82,7 @@ public class Cohen {
     public List<Ponto2D> CohenSutherlandLineClip(Ponto2D p1, Ponto2D p2)
     {
 
-
+        auxPontos.clear();
         int outcode0 = ComputeOutCode(p1.getCordenadaX(), p1.getCordenadaY());
         int outcode1 = ComputeOutCode(p2.getCordenadaX(), p2.getCordenadaY());
         boolean accept = false;
