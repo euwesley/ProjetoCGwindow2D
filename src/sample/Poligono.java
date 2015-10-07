@@ -2,6 +2,8 @@ package sample;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import sample.clipping.Cohen;
 
 import java.util.*;
 
@@ -38,7 +40,7 @@ public class Poligono {
             case "rb1":
                 for (int i = 0; i < listaDePontos.size() - 1; i++) {
                     canvasFx.getGraphicsContext2D().strokeLine(listaDePontos.get(i).xMundoVp(mundo, vP), listaDePontos.get(i).yMundoVp(mundo, vP), listaDePontos.get(i + 1).xMundoVp(mundo, vP),
-                            listaDePontos.get(i + 1).yMundoVp(mundo, vP));
+                                    listaDePontos.get(i + 1).yMundoVp(mundo, vP));
                 }
                 break;
             case "rb2":
@@ -188,6 +190,15 @@ public class Poligono {
 
     }
 
+    public  List<Poligono> clipping(Janela clip){
+        List<Poligono> listaPontosAuxiliar = new LinkedList<Poligono>();
+        Cohen cohen = new Cohen(clip);
+        for (int i = 0; i < (this.listaDePontos.size()-1) ; i++) {
+            listaPontosAuxiliar.add(new Poligono(cohen.CohenSutherlandLineClip(listaDePontos.get(i), listaDePontos.get(i + 1))));
+        }
+        return listaPontosAuxiliar;
+    }
+
     public Ponto2D getCentro() {
         //teste ro
         double cX = 0, cY = 0;
@@ -231,7 +242,6 @@ public class Poligono {
             this.listaDePontos.get(i).pontoRefletidoY();
         }
     }
-
     public void curvaCasteljau(){
         Casteljau curva = new Casteljau(getListaPontos());
         this.listaDePontos = curva.geraListaCurva();

@@ -9,12 +9,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import sample.clipping.Cohen;
 import sun.rmi.server.InactiveGroupException;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Controller {
+    @FXML
+    protected Pane pnlCurva,pnlClip;
     @FXML
     protected Canvas canvasFx;
     @FXML
@@ -32,11 +38,21 @@ public class Controller {
 
     Janela mundo = new Janela(-250,250,-250,250);
     Janela Vp = new Janela(0,500,0,500);
+    Janela janelaClip = new Janela(-100,100,-100,100);
     Poligono poligono = null;
     DisplayFile displayFile = null;
+    DisplayFile displayClip = null;
     TreeView<String> tree ;
     RadioButton radioButton;
 
+    public void mostraPainelClip(){
+        this.pnlCurva.setVisible(false);
+        this.pnlClip.setVisible(true);
+    }
+    public void mostraPainelCurva(){
+        this.pnlClip.setVisible(false);
+        this.pnlCurva.setVisible(true);
+    }
     public void inicioPrograma(){
         this.desenhaBorda();
     }
@@ -53,6 +69,7 @@ public class Controller {
         return Integer.valueOf(id[1]);
     }
     public void desenhaBorda() {
+
         canvasFx.getGraphicsContext2D().clearRect(0,0,this.Vp.getCordXMax(),this.Vp.getCordYMax());
         Poligono retaX=new Poligono(new LinkedList<Ponto2D>());
         Poligono retaY=new Poligono(new LinkedList<Ponto2D>());
@@ -66,9 +83,22 @@ public class Controller {
 
         retaX.desenhaCanvas(canvasFx, this.mundo, this.Vp, algoritimoDesenho());
         retaY.desenhaCanvas(canvasFx,this.mundo,this.Vp, algoritimoDesenho());
+        if(this.pnlClip.isVisible() || !this.pnlClip.isVisible()){
+            this.desenhaJanela(janelaClip);
+        }
+        if(displayClip != null){
+            canvasFx.getGraphicsContext2D().setStroke(Color.RED);
+            canvasFx.getGraphicsContext2D().setLineWidth(2);
+            for (int i = 0; i < displayClip.getListaPoligonos().size() ; i++) {
+                displayClip.getListaPoligonos().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+            }
+            canvasFx.getGraphicsContext2D().setStroke(Color.BLACK);
+            canvasFx.getGraphicsContext2D().setLineWidth(1);
+        }
         if(displayFile != null){
             displayPoligonos();
         }
+
 
     }
     public void desenhaPoligono(){
@@ -78,6 +108,16 @@ public class Controller {
         for (int i = 0; i <displayFile.getListaPoligonos().size() ; i++) {
             displayFile.getListaPoligonos().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
         }
+    }
+    public void desenhaJanela(Janela janela){
+        List<Ponto2D> pontosJanela = new LinkedList<Ponto2D>();
+        pontosJanela.add(new Ponto2D(janela.getCordXMin(),janela.getCordYMin()));
+        pontosJanela.add(new Ponto2D(janela.getCordXMin(),janela.getCordYMax()));
+        pontosJanela.add(new Ponto2D(janela.getCordXMax(),janela.getCordYMax()));
+        pontosJanela.add(new Ponto2D(janela.getCordXMax(),janela.getCordYMin()));
+        pontosJanela.add(new Ponto2D(janela.getCordXMin(),janela.getCordYMin()));
+        Poligono janelaDesenha = new Poligono(pontosJanela);
+        janelaDesenha.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
     }
     public void monitoraMouse() {
         canvasFx.setOnMouseMoved(new EventHandler<MouseEvent>() {
@@ -284,4 +324,20 @@ public class Controller {
         mostraPoligonos("Curva bSplines ");
         desenhaBorda();
     }
+    public void cliping(){
+        this.mostraPainelClip();
+        displayClip = new DisplayFile(displayFile.clipping(janelaClip));
+        canvasFx.getGraphicsContext2D().clearRect(0,0,this.Vp.getCordXMax(),this.Vp.getCordYMax());
+        desenhaJanela(janelaClip);
+        desenhaBorda();
+        canvasFx.getGraphicsContext2D().setStroke(Color.RED);
+        canvasFx.getGraphicsContext2D().setLineWidth(2);
+        for (int i = 0; i < displayClip.getListaPoligonos().size() ; i++) {
+            displayClip.getListaPoligonos().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+        }
+        canvasFx.getGraphicsContext2D().setStroke(Color.BLACK);
+        canvasFx.getGraphicsContext2D().setLineWidth(1);
+
+    }
+
 }

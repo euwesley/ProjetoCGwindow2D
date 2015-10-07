@@ -19,7 +19,7 @@ public class Cohen {
     private int BOTTOM = 4; // 0100
     private int TOP = 8;    // 1000
     double xmin,xmax,ymin,ymax;
-    List<Ponto2D> auxPontos = new LinkedList<Ponto2D>();
+
     DisplayFile display;
 // Compute the bit code for a point (x, y) using the clip rectangle
 // bounded diagonally by (xmin, ymin), and (xmax, ymax)
@@ -54,7 +54,7 @@ public class Cohen {
     public int andLogico(int a,int b){
         return a & b;
     }
-    public void calculaPontoCliping(Ponto2D ponto,double m){
+    public void calculaPontoCliping(Ponto2D ponto,double m,List<Ponto2D> auxPontos){
         double yE,yD,xT,xB;
         Ponto2D direita,esquerda,topo,fundo;
         yE = (m*(xmin - ponto.getCordenadaX()))+ponto.getCordenadaY();
@@ -79,10 +79,64 @@ public class Cohen {
             auxPontos.add(fundo);
         }
     }
+    public void calculaPontoSozinho(Ponto2D pontoS,double m,List<Ponto2D> auxPontos){
+        double yE,yD,xT,xB,x,y;
+        Ponto2D direita,esquerda,topo,fundo;
+        boolean areaX,areaY;
+        areaX = (xmin < pontoS.getCordenadaX() && pontoS.getCordenadaX() < xmax);
+        areaY = (ymin < pontoS.getCordenadaY() && pontoS.getCordenadaY() < ymax);
+
+        if( areaX && !areaY ){
+            xT = (pontoS.getCordenadaX()+((1/m)*(ymax - pontoS.getCordenadaY())));
+            xB = (pontoS.getCordenadaX()+((1/m)*(ymin - pontoS.getCordenadaY())));
+            if((pontoS.getCordenadaY()>ymax)){
+                topo = new Ponto2D(xT,ymax);
+                auxPontos.add(topo);
+            }
+            if((pontoS.getCordenadaY()<ymin)) {
+                fundo = new Ponto2D(xB, ymin);
+                auxPontos.add(fundo);
+            }
+        }
+        if(!areaX && areaY){
+            yE = (m*(xmin - pontoS.getCordenadaX()))+pontoS.getCordenadaY();
+            yD = (m*(xmax - pontoS.getCordenadaX()))+pontoS.getCordenadaY();
+            if((pontoS.getCordenadaX() < xmin)){
+                esquerda = new Ponto2D(xmin,yE);
+                auxPontos.add(esquerda);
+            }
+            if(pontoS.getCordenadaX()>xmax){
+                direita = new Ponto2D(xmax,yD);
+                auxPontos.add(direita);
+            }
+        }
+        if(!areaX && !areaY){
+            xT = (pontoS.getCordenadaX()+((1/m)*(ymax - pontoS.getCordenadaY())));
+            xB = (pontoS.getCordenadaX()+((1/m)*(ymin - pontoS.getCordenadaY())));
+            yE = (m*(xmin - pontoS.getCordenadaX()))+pontoS.getCordenadaY();
+            yD = (m*(xmax - pontoS.getCordenadaX()))+pontoS.getCordenadaY();
+
+            if(ymin <= yE && yE <= ymax && pontoS.getCordenadaX() < xmin){
+                esquerda = new Ponto2D(xmin,yE);
+                auxPontos.add(esquerda);
+            }
+            if(ymin <= yD && yD <= ymax && pontoS.getCordenadaX() > xmax){
+                direita = new Ponto2D(xmax,yD);
+                auxPontos.add(direita);
+            }
+            if(xmin <= xT && xT <= xmax && pontoS.getCordenadaY() > ymax){
+                topo = new Ponto2D(xT,ymax);
+                auxPontos.add(topo);
+            }
+            if(xmin <= xB && xB <= xmax && pontoS.getCordenadaY() < ymin) {
+                fundo = new Ponto2D(xB, ymin);
+                auxPontos.add(fundo);
+            }
+        }
+    }
     public List<Ponto2D> CohenSutherlandLineClip(Ponto2D p1, Ponto2D p2)
     {
-
-        auxPontos.clear();
+        List<Ponto2D> auxPontos = new LinkedList<Ponto2D>();
         int outcode0 = ComputeOutCode(p1.getCordenadaX(), p1.getCordenadaY());
         int outcode1 = ComputeOutCode(p2.getCordenadaX(), p2.getCordenadaY());
         boolean accept = false;
@@ -96,7 +150,15 @@ public class Cohen {
             auxPontos.add(p1);
             auxPontos.add(p2);
         } else if(andLogico(outcode0,outcode1)==INSIDE){
-           this.calculaPontoCliping(p1, m);
+            if(outcode0==INSIDE){
+                auxPontos.add(p1);
+                this.calculaPontoSozinho(p2,m,auxPontos);
+            }else if(outcode1==INSIDE){
+                this.calculaPontoSozinho(p1,m,auxPontos);
+                auxPontos.add(p2);
+            }else {
+                this.calculaPontoCliping(p1, m,auxPontos);
+            }
         }
        return  auxPontos;
     }
