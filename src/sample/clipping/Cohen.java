@@ -139,11 +139,10 @@ public class Cohen {
         List<Ponto2D> auxPontos = new LinkedList<Ponto2D>();
         int outcode0 = ComputeOutCode(p1.getCordenadaX(), p1.getCordenadaY());
         int outcode1 = ComputeOutCode(p2.getCordenadaX(), p2.getCordenadaY());
-        boolean accept = false;
-        String bin1 = Integer.toString(outcode0, 2);
+       /* String bin1 = Integer.toString(outcode0, 2);
         String bin2= Integer.toString(outcode1, 2);
         System.out.println("code 0: "+ bin1);
-        System.out.println("code 1: "+ bin2);
+        System.out.println("code 1: "+ bin2);*/
         double m=((p2.getCordenadaY() - p1.getCordenadaY())/(p2.getCordenadaX()-p1.getCordenadaX()));
 
         if ( outcode0 == INSIDE && outcode1 == INSIDE){

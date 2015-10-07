@@ -60,8 +60,11 @@
             <Label layoutX="387.0" layoutY="72.0" style="-fx-background-color: cornsilk;" text=" View Port " />
             <Pane layoutX="22.0" layoutY="18.0" prefHeight="390.0" prefWidth="343.0" style="-fx-border-color: Gray;">
                <children>
-                  <StackPane fx:id="plStack" layoutX="15.0" layoutY="55.0" prefHeight="208.0" prefWidth="310.0" style="-fx-border-color: #d0d0d0; -fx-background-color: #d0d0d0;" />
-                  <Button layoutX="268.0" layoutY="14.0" mnemonicParsing="false" onAction="#iniciaPoligono" text="Criar" />
+                  <StackPane fx:id="plStack" layoutX="15.0" layoutY="55.0" prefHeight="208.0" prefWidth="310.0" style="-fx-border-color: #d0d0d0; -fx-background-color: #d0d0d0;">
+                     <children>
+                        <TreeView fx:id="treeTeste" prefHeight="200.0" prefWidth="200.0" />
+                     </children></StackPane>
+                  <Button layoutX="229.0" layoutY="14.0" mnemonicParsing="false" onAction="#iniciaPoligono" text="Criar" />
                   <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Poligonos " />
                   <TabPane layoutX="15.0" layoutY="263.0" prefHeight="115.0" prefWidth="310.0" style="-fx-border-color: #d0d0d0;" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
@@ -135,6 +138,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <RadioButton fx:id="rbFechado" layoutX="85.0" layoutY="18.0" mnemonicParsing="false" text="Fechado" toggleGroup="$rbPoligono" />
+                  <Button layoutX="277.0" layoutY="14.0" mnemonicParsing="false" onAction="#finalizaPoligono" text="Finalizar" />
                </children>
             </Pane>
             <Pane layoutX="21.0" layoutY="594.0" prefHeight="99.0" prefWidth="525.0" style="-fx-border-color: Gray;">
@@ -209,6 +213,16 @@
                   <Button layoutX="21.0" layoutY="30.0" mnemonicParsing="false" onAction="#cliping" text="Clip Poligonos" />
                </children>
             </Pane>
+            <Label fx:id="capMouse" layoutX="23.0" layoutY="561.0" text="Label" />
+         </children>
+      </Pane>
+      <Pane prefHeight="200.0" prefWidth="200.0" visible="false">
+         <children>
+            <ImageView fx:id="imgViewRoot" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/folder_16.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </children>

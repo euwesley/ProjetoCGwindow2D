@@ -1,7 +1,7 @@
 package sample;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
+
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -12,9 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import sample.clipping.Cohen;
-import sun.rmi.server.InactiveGroupException;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,11 +23,15 @@ public class Controller {
     @FXML
     protected Canvas canvasFx;
     @FXML
-    protected Label lblX,lblY,lblX2,lblY2;
+    protected Label lblX,lblY,lblX2,lblY2,capMouse;
     @FXML
     protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR,txtAngulo,txtEscY,txtEscX;
     @FXML
     protected TextField txtMovY,txtMovX,txtYreta,txtXreta,txtNPontos;
+    @FXML
+    protected TreeView treeTeste;
+    @FXML
+    protected ImageView imgViewRoot;
     @FXML
     protected StackPane plStack;
     @FXML
@@ -42,7 +45,6 @@ public class Controller {
     Poligono poligono = null;
     DisplayFile displayFile = null;
     DisplayFile displayClip = null;
-    TreeView<String> tree ;
     RadioButton radioButton;
     public void reinicia(){
         this.poligono.clearList();
@@ -76,8 +78,8 @@ public class Controller {
         return radioButton.getId();
     }
     public Integer poligonoSelecionado(){
-        String id[]= String.valueOf(tree.getSelectionModel().getSelectedItem().getValue()).split(" ");
-        return Integer.valueOf(id[1]);
+
+        return (treeTeste.getFocusModel().getFocusedIndex()-1);
     }
     public void desenhaBorda() {
 
@@ -121,7 +123,7 @@ public class Controller {
         }
     }
     public void desenhaJanela(Janela janela){
-        List<Ponto2D> pontosJanela = new LinkedList<Ponto2D>();
+        List<Ponto2D> pontosJanela = new LinkedList<>();
         pontosJanela.add(new Ponto2D(janela.getCordXMin(),janela.getCordYMin()));
         pontosJanela.add(new Ponto2D(janela.getCordXMin(),janela.getCordYMax()));
         pontosJanela.add(new Ponto2D(janela.getCordXMax(),janela.getCordYMax()));
@@ -131,15 +133,12 @@ public class Controller {
         janelaDesenha.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
     }
     public void monitoraMouse() {
-        canvasFx.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (mundo != null && Vp != null) {
-                    lblX.setText(String.valueOf(event.getX()));
-                    lblY.setText(String.valueOf(event.getY()));
-                    lblX2.setText(String.valueOf(xVpMundo((int) event.getX())));
-                    lblY2.setText(String.valueOf(yVpMundo((int) event.getY())));
-                }
+        canvasFx.setOnMouseMoved(event -> {
+            if (mundo != null && Vp != null) {
+                lblX.setText(String.valueOf(event.getX()));
+                lblY.setText(String.valueOf(event.getY()));
+                lblX2.setText(String.valueOf(xVpMundo((int) event.getX())));
+                lblY2.setText(String.valueOf(yVpMundo((int) event.getY())));
             }
         });
     }
@@ -147,7 +146,7 @@ public class Controller {
         if(mundo!=null && Vp!=null) {
             //canvasFx.getGraphicsContext2D().clearRect(0, 0, canvasFx.getWidth(), canvasFx.getHeight());
             this.poligono = new Poligono(new LinkedList<Ponto2D>());
-            this.displayFile = new DisplayFile(new LinkedList<Poligono>());
+            this.displayFile = new DisplayFile(new LinkedList<>());
             coletaPontos2D();
 
         }else{
@@ -162,7 +161,7 @@ public class Controller {
         if(this.poligono == null) {
             //canvasFx.getGraphicsContext2D().clearRect(0, 0, canvasFx.getWidth(), canvasFx.getHeight());
             this.poligono = new Poligono(new LinkedList<Ponto2D>());
-            this.displayFile = new DisplayFile(new LinkedList<Poligono>());
+            this.displayFile = new DisplayFile(new LinkedList<>());
             this.poligono.gravaPonto2D(new Ponto2D(Double.valueOf(txtXreta.getText()),Double.valueOf(txtYreta.getText())));
             displayFile.gravaPoligono(poligono);
             mostraPoligonos("Curva ");
@@ -177,32 +176,48 @@ public class Controller {
             poligono = new Poligono(new LinkedList<Ponto2D>());
         }
     }
+    public void finalizaPoligono(){
+        if(this.poligono.getListaPontos().size()>=2) {
+            String bt = tipoPoligono();
+            if (bt.contentEquals("rbFechado")) {
+                poligono.gravaPonto2D(new Ponto2D(poligono.getListaPontos().get(0).getCordenadaX(), poligono.getListaPontos().get(0).getCordenadaY()));
+            }
+            displayFile.gravaPoligono(poligono);
+            mostraPoligonos("Poligono ");
+            poligono.desenhaCanvas(canvasFx, mundo, Vp, algoritimoDesenho());
+            poligono = new Poligono(new LinkedList<Ponto2D>());
+            desenhaBorda();
+        }
+    }
     public void coletaPontos2D(){
-        canvasFx.setOnMouseReleased(new EventHandler<MouseEvent>() {
-           @Override
-           public void handle(MouseEvent event) {
-              if(event.getButton()== MouseButton.SECONDARY && poligono.getListaPontos().size()>=2){
-                  String bt = tipoPoligono();
-                  if(bt.contentEquals("rbFechado")) {
-                      poligono.gravaPonto2D(new Ponto2D(poligono.getListaPontos().get(0).getCordenadaX(), poligono.getListaPontos().get(0).getCordenadaY()));
-                  }
-                  displayFile.gravaPoligono(poligono);
-                  mostraPoligonos("Poligono ");
-                  poligono.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
-                  poligono = new Poligono(new LinkedList<Ponto2D>());
 
-              }else if(event.getButton() == MouseButton.PRIMARY){
-                      poligono.gravaPonto2D(new Ponto2D((int)xVpMundo((int) event.getX()), (int)yVpMundo((int) event.getY())));
-                      poligono.desenhaCanvas(canvasFx, mundo, Vp,algoritimoDesenho());
-              }
-           }
-       });
+        canvasFx.addEventHandler(MouseEvent.MOUSE_CLICKED,event -> {
+
+            if (event.getButton() == MouseButton.SECONDARY && poligono.getListaPontos().size() >= 2) {
+                String bt = tipoPoligono();
+                if (bt.contentEquals("rbFechado")) {
+                    poligono.gravaPonto2D(new Ponto2D(poligono.getListaPontos().get(0).getCordenadaX(), poligono.getListaPontos().get(0).getCordenadaY()));
+                }
+                displayFile.gravaPoligono(poligono);
+                mostraPoligonos("Poligono ");
+                poligono.desenhaCanvas(canvasFx, mundo, Vp, algoritimoDesenho());
+                poligono = new Poligono(new LinkedList<Ponto2D>());
+                desenhaBorda();
+
+            } else if (event.getButton() == MouseButton.PRIMARY) {
+                poligono.gravaPonto2D(new Ponto2D((int) xVpMundo((int) event.getX()), (int) yVpMundo((int) event.getY())));
+                poligono.desenhaCanvas(canvasFx, mundo, Vp, algoritimoDesenho());
+                //mostraPoligonos("Poligono ");
+            }
+            capMouse.setText(String.valueOf(event.getButton()));
+        });
+
     }
 
     public void iniciaCirculo(){
         if(mundo!=null && Vp!=null) {
             this.poligono = new Poligono(new LinkedList<Ponto2D>());
-            this.displayFile = new DisplayFile(new LinkedList<Poligono>());
+            this.displayFile = new DisplayFile(new LinkedList<>());
             desenhaCirculo();
         }else{
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
@@ -220,24 +235,24 @@ public class Controller {
             this.poligono = new Poligono(new LinkedList<Ponto2D>());
     }
     public void mostraPoligonos(String nome){
-        Image folder = new Image(getClass().getResourceAsStream("img\\folder_16.png"));
-        ImageView rootIcon = new ImageView(folder);
-        TreeItem<String> rootItem = new TreeItem<String>("Poligonos",rootIcon);
+
+        TreeItem<String> rootItem = new TreeItem<>("Poligonos",imgViewRoot);
         rootItem.setExpanded(true);
 
         for (int i = 0; i < displayFile.getListaPoligonos().size(); i++) {
-            TreeItem<String> item = new TreeItem<String>(nome + i);
+            TreeItem<String> item = new TreeItem<>(nome + i);
             rootItem.getChildren().add(item);
             int o = displayFile.getListaPoligonos().get(i).getListaPontos().size();
             for (int j = 0; j < o; j++) {
-                TreeItem<String> folhas = new TreeItem<String>("X " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaX() + " Y " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaY());
+                TreeItem<String> folhas = new TreeItem<>("X " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaX() + " Y " + displayFile.getListaPoligonos().get(i).getListaPontos().get(j).getCordenadaY());
                 rootItem.getChildren().get(i).getChildren().add(folhas);
             }
-            item.setExpanded(true);
+            //item.setExpanded(true);
         }
-        tree = new TreeView<String> (rootItem);
+        treeTeste.setRoot(rootItem);
         rootItem.setExpanded(true);
-        plStack.getChildren().add(tree);
+        //plStack.getChildren().add(treeTeste);
+
 
     }
 
