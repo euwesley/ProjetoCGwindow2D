@@ -44,7 +44,15 @@ public class Controller {
     DisplayFile displayClip = null;
     TreeView<String> tree ;
     RadioButton radioButton;
-
+    public void reinicia(){
+        this.poligono.clearList();
+        this.displayFile.getListaPoligonos().clear();
+        if(this.displayClip != null) {
+            this.displayClip.getListaPoligonos().clear();
+        }
+        this.desenhaBorda();
+        this.mostraPoligonos("Poligonos ");
+    }
     public void mostraPainelClip(){
         this.pnlCurva.setVisible(false);
         this.pnlClip.setVisible(true);
@@ -54,6 +62,7 @@ public class Controller {
         this.pnlClip.setVisible(false);
         this.pnlCurva.setVisible(true);
         this.desenhaBorda();
+
     }
     public void inicioPrograma(){
         this.desenhaBorda();
@@ -307,9 +316,17 @@ public class Controller {
         desenhaPoligono();
     }
     public void casteljau(){
-        displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaCasteljau();
-        mostraPoligonos("Curva Casteljau ");
-        desenhaBorda();
+
+        if( displayFile.getListaPoligonos().get(poligonoSelecionado()).getListaPontos().size()==3) {
+            displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaCasteljau();
+            mostraPoligonos("Curva Casteljau ");
+            desenhaBorda();
+        }else{
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Alerta de Erro");
+            dialogoInfo.setHeaderText("O poligono Selecionado de ter apenas 3 pontos");
+            dialogoInfo.showAndWait();
+        }
     }
     public void hermit(){
         displayFile.getListaPoligonos().get(poligonoSelecionado()).curvaHermit(Integer.valueOf(txtNPontos.getText()));

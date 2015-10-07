@@ -200,6 +200,7 @@
                   <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelClip" text="Cliping" />
                   <Button layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelCurva" text="Curvas" />
                   <Button layoutX="146.0" layoutY="14.0" mnemonicParsing="false" text="3D" />
+                  <Button layoutX="213.0" layoutY="60.0" mnemonicParsing="false" onAction="#reinicia" text="Limpar canvas" />
                </children>
             </Pane>
             <Pane fx:id="pnlClip" layoutX="23.0" layoutY="416.0" prefHeight="153.0" prefWidth="343.0" style="-fx-border-color: Gray;" visible="false">
