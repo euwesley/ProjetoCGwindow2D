@@ -48,10 +48,12 @@ public class Controller {
     public void mostraPainelClip(){
         this.pnlCurva.setVisible(false);
         this.pnlClip.setVisible(true);
+        this.desenhaBorda();
     }
     public void mostraPainelCurva(){
         this.pnlClip.setVisible(false);
         this.pnlCurva.setVisible(true);
+        this.desenhaBorda();
     }
     public void inicioPrograma(){
         this.desenhaBorda();
@@ -83,10 +85,13 @@ public class Controller {
 
         retaX.desenhaCanvas(canvasFx, this.mundo, this.Vp, algoritimoDesenho());
         retaY.desenhaCanvas(canvasFx,this.mundo,this.Vp, algoritimoDesenho());
-        if(this.pnlClip.isVisible() || !this.pnlClip.isVisible()){
+        if(displayFile != null){
+            displayPoligonos();
+        }
+        if(this.pnlClip.isVisible()){
             this.desenhaJanela(janelaClip);
         }
-        if(displayClip != null){
+        if(displayClip != null && this.pnlClip.isVisible()){
             canvasFx.getGraphicsContext2D().setStroke(Color.RED);
             canvasFx.getGraphicsContext2D().setLineWidth(2);
             for (int i = 0; i < displayClip.getListaPoligonos().size() ; i++) {
@@ -94,9 +99,6 @@ public class Controller {
             }
             canvasFx.getGraphicsContext2D().setStroke(Color.BLACK);
             canvasFx.getGraphicsContext2D().setLineWidth(1);
-        }
-        if(displayFile != null){
-            displayPoligonos();
         }
 
 
@@ -325,18 +327,26 @@ public class Controller {
         desenhaBorda();
     }
     public void cliping(){
-        this.mostraPainelClip();
-        displayClip = new DisplayFile(displayFile.clipping(janelaClip));
-        canvasFx.getGraphicsContext2D().clearRect(0,0,this.Vp.getCordXMax(),this.Vp.getCordYMax());
-        desenhaJanela(janelaClip);
-        desenhaBorda();
-        canvasFx.getGraphicsContext2D().setStroke(Color.RED);
-        canvasFx.getGraphicsContext2D().setLineWidth(2);
-        for (int i = 0; i < displayClip.getListaPoligonos().size() ; i++) {
-            displayClip.getListaPoligonos().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+
+        if( displayFile!= null) {
+            displayClip = new DisplayFile(displayFile.clipping(janelaClip));
+            canvasFx.getGraphicsContext2D().clearRect(0,0,this.Vp.getCordXMax(),this.Vp.getCordYMax());
+            desenhaJanela(janelaClip);
+            desenhaBorda();
+            canvasFx.getGraphicsContext2D().setStroke(Color.RED);
+            canvasFx.getGraphicsContext2D().setLineWidth(2);
+            for (int i = 0; i < displayClip.getListaPoligonos().size() ; i++) {
+                displayClip.getListaPoligonos().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+            }
+            canvasFx.getGraphicsContext2D().setStroke(Color.BLACK);
+            canvasFx.getGraphicsContext2D().setLineWidth(1);
+
+        }else{
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Alerta de Erro");
+            dialogoInfo.setHeaderText("Criar um Poligono Primeiro!");
+            dialogoInfo.showAndWait();
         }
-        canvasFx.getGraphicsContext2D().setStroke(Color.BLACK);
-        canvasFx.getGraphicsContext2D().setLineWidth(1);
 
     }
 

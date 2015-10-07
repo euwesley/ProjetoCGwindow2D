@@ -178,7 +178,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="pnlCurva" layoutX="22.0" layoutY="420.0" prefHeight="115.0" prefWidth="343.0" style="-fx-border-color: Gray;" visible="false">
+            <Pane fx:id="pnlCurva" layoutX="22.0" layoutY="420.0" prefHeight="115.0" prefWidth="343.0" style="-fx-border-color: Gray;">
                <children>
                   <Button layoutX="9.0" layoutY="14.0" mnemonicParsing="false" onAction="#casteljau" text="Casteljau" />
                   <Button layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#hermit" text="Hermit" />
@@ -197,12 +197,15 @@
             <Pane layoutX="558.0" layoutY="593.0" prefHeight="99.0" prefWidth="318.0" style="-fx-border-color: Gray;">
                <children>
                   <Label layoutX="20.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Funções " />
-                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#cliping" text="Cliping" />
+                  <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelClip" text="Cliping" />
+                  <Button layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelCurva" text="Curvas" />
+                  <Button layoutX="146.0" layoutY="14.0" mnemonicParsing="false" text="3D" />
                </children>
             </Pane>
             <Pane fx:id="pnlClip" layoutX="23.0" layoutY="416.0" prefHeight="153.0" prefWidth="343.0" style="-fx-border-color: Gray;" visible="false">
                <children>
                   <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Clipping " />
+                  <Button layoutX="21.0" layoutY="30.0" mnemonicParsing="false" onAction="#cliping" text="Clip Poligonos" />
                </children>
             </Pane>
          </children>
