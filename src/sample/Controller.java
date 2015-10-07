@@ -282,10 +282,10 @@ public class Controller {
         desenhaBorda();
     }
     public void scalaMundo(){
-        this.mundo.setCordXMax((Double.valueOf(txtXmax.getText()) * brScalaMundo.getValue()));
-        this.mundo.setCordXMin((Double.valueOf(txtXmin.getText()) * brScalaMundo.getValue()));
-        this.mundo.setCordYMax((Double.valueOf(txtYmax.getText()) * brScalaMundo.getValue()));
-        this.mundo.setCordYMin((Double.valueOf(txtYmin.getText()) * brScalaMundo.getValue()));
+        this.mundo.setCordXMax((Double.valueOf(txtXmax.getText()) - brScalaMundo.getValue()));
+        this.mundo.setCordXMin((Double.valueOf(txtXmin.getText()) + brScalaMundo.getValue()));
+        this.mundo.setCordYMax((Double.valueOf(txtYmax.getText()) - brScalaMundo.getValue()));
+        this.mundo.setCordYMin((Double.valueOf(txtYmin.getText()) + brScalaMundo.getValue()));
         desenhaBorda();
 
     }

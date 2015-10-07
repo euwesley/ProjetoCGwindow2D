@@ -149,7 +149,7 @@
                   <TextField fx:id="txtYmin" layoutX="122.0" layoutY="22.0" prefHeight="25.0" prefWidth="55.0" text="-250" />
                   <Button layoutX="196.0" layoutY="22.0" mnemonicParsing="false" onAction="#createMundo" prefHeight="25.0" prefWidth="66.0" text="Atualiza" />
                   <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Mundo " />
-                  <Slider fx:id="brScalaMundo" layoutX="233.0" layoutY="66.0" min="1.0" onMouseReleased="#scalaMundo" value="1.0" />
+                  <Slider fx:id="brScalaMundo" layoutX="233.0" layoutY="66.0" max="300.0" min="1.0" onMouseReleased="#scalaMundo" value="1.0" />
                   <Label layoutX="196.0" layoutY="62.0" style="-fx-background-color: cornsilk;" text="Scala" />
                   <ImageView fitHeight="92.0" fitWidth="140.0" layoutX="373.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
                      <image>
