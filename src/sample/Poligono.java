@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import sample.clipping.Cohen;
+import sample.package3D.Ponto3D;
 
 import java.util.*;
 
@@ -60,8 +61,7 @@ public class Poligono {
         }
     }
 
-    public void dda(int x0, int y0, int x1, int y1, GraphicsContext draw2D)
-    {
+    public void dda(int x0, int y0, int x1, int y1, GraphicsContext draw2D){
         int deltaX = x1 - x0;
         int deltaY = y1 - y0;
 
@@ -191,7 +191,7 @@ public class Poligono {
     }
 
     public  List<Poligono> clipping(Janela clip){
-        List<Poligono> listaPontosAuxiliar = new LinkedList<Poligono>();
+        List<Poligono> listaPontosAuxiliar = new LinkedList<>();
         Cohen cohen = new Cohen(clip);
         for (int i = 0; i < (this.listaDePontos.size()-1) ; i++) {
             listaPontosAuxiliar.add(new Poligono(cohen.CohenSutherlandLineClip(listaDePontos.get(i), listaDePontos.get(i + 1))));

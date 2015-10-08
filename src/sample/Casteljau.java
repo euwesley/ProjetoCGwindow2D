@@ -31,7 +31,7 @@ public class Casteljau {
         aux1 = getMeioReta(p1,p2);
         aux2 = getMeioReta(p2,p3);
         double d=Math.sqrt(Math.pow((p2.getCordenadaX() - p1.getCordenadaX()),2) + Math.pow((p2.getCordenadaY() - p1.getCordenadaY()),2));
-        if(d <= 10){
+        if(d <= 1){
             getListaPontos().add(p1);
         }else {
             montaCurva(p1, aux1, getMeioReta(aux1, aux2));

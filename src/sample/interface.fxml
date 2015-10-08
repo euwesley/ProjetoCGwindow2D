@@ -182,7 +182,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="pnlCurva" layoutX="22.0" layoutY="420.0" prefHeight="115.0" prefWidth="343.0" style="-fx-border-color: Gray;">
+            <Pane fx:id="pnlCurva" layoutX="22.0" layoutY="420.0" prefHeight="115.0" prefWidth="343.0" style="-fx-border-color: Gray;" visible="false">
                <children>
                   <Button layoutX="9.0" layoutY="14.0" mnemonicParsing="false" onAction="#casteljau" text="Casteljau" />
                   <Button layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#hermit" text="Hermit" />
@@ -203,7 +203,7 @@
                   <Label layoutX="20.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Funções " />
                   <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelClip" text="Cliping" />
                   <Button layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelCurva" text="Curvas" />
-                  <Button layoutX="146.0" layoutY="14.0" mnemonicParsing="false" text="3D" />
+                  <Button layoutX="146.0" layoutY="14.0" mnemonicParsing="false" onAction="#montaComboBox3d" text="3D" />
                   <Button layoutX="213.0" layoutY="60.0" mnemonicParsing="false" onAction="#reinicia" text="Limpar canvas" />
                </children>
             </Pane>
@@ -213,7 +213,14 @@
                   <Button layoutX="21.0" layoutY="30.0" mnemonicParsing="false" onAction="#cliping" text="Clip Poligonos" />
                </children>
             </Pane>
-            <Label fx:id="capMouse" layoutX="23.0" layoutY="561.0" text="Label" />
+            <Pane fx:id="pnl3D" layoutX="23.0" layoutY="416.0" prefHeight="153.0" prefWidth="343.0" style="-fx-border-color: Grey;">
+               <children>
+                  <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" 3D " />
+                  <ComboBox fx:id="comBox3D" layoutX="14.0" layoutY="14.0" onMouseClicked="#montaComboBox3d" prefWidth="150.0" promptText="Selecione o Objeto" />
+                  <Button layoutX="178.0" layoutY="14.0" mnemonicParsing="false" onAction="#gravaPoligonos3D" text="Carregar" />
+                  <TextArea fx:id="txtAreaPontos3D" layoutX="14.0" layoutY="46.0" prefHeight="99.0" prefWidth="310.0" />
+               </children>
+            </Pane>
          </children>
       </Pane>
       <Pane prefHeight="200.0" prefWidth="200.0" visible="false">

@@ -2,7 +2,6 @@ package sample.clipping;
 
 import sample.DisplayFile;
 import sample.Janela;
-import sample.Poligono;
 import sample.Ponto2D;
 
 import java.util.LinkedList;
@@ -33,8 +32,7 @@ public class Cohen {
         this.ymax = janelaClip.getCordYMax();
     }
 
-    public int ComputeOutCode(double x, double y)
-    {
+    public int ComputeOutCode(double x, double y){
         int code;
 
         code = INSIDE;          // initialised as being inside of clip window
@@ -134,8 +132,7 @@ public class Cohen {
             }
         }
     }
-    public List<Ponto2D> CohenSutherlandLineClip(Ponto2D p1, Ponto2D p2)
-    {
+    public List<Ponto2D> CohenSutherlandLineClip(Ponto2D p1, Ponto2D p2){
         List<Ponto2D> auxPontos = new LinkedList<Ponto2D>();
         int outcode0 = ComputeOutCode(p1.getCordenadaX(), p1.getCordenadaY());
         int outcode1 = ComputeOutCode(p2.getCordenadaX(), p2.getCordenadaY());

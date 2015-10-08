@@ -13,6 +13,7 @@ public class Ponto2D {
         this.cordenadaY = cordenadaY;
     }
 
+
     public double getCordenadaX() {
         return cordenadaX;
     }

@@ -2,32 +2,43 @@ package sample;
 
 
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import sample.package3D.DisplayFile3D;
+import sample.package3D.Poligono3D;
+import sample.package3D.Ponto3D;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Controller {
     @FXML
-    protected Pane pnlCurva,pnlClip;
+    protected Pane pnlCurva,pnlClip,pnl3D;
     @FXML
     protected Canvas canvasFx;
     @FXML
-    protected Label lblX,lblY,lblX2,lblY2,capMouse;
+    protected ComboBox comBox3D;
+    @FXML
+    protected Label lblX,lblY,lblX2,lblY2;
     @FXML
     protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR,txtAngulo,txtEscY,txtEscX;
     @FXML
     protected TextField txtMovY,txtMovX,txtYreta,txtXreta,txtNPontos;
+    @FXML
+    protected TextArea txtAreaPontos3D;
     @FXML
     protected TreeView treeTeste;
     @FXML
@@ -43,8 +54,10 @@ public class Controller {
     Janela Vp = new Janela(0,500,0,500);
     Janela janelaClip = new Janela(-100,100,-100,100);
     Poligono poligono = null;
+    Poligono3D poligono3D = null;
     DisplayFile displayFile = null;
     DisplayFile displayClip = null;
+    DisplayFile3D displayFile3D = null;
     RadioButton radioButton;
     public void reinicia(){
         this.poligono.clearList();
@@ -57,11 +70,13 @@ public class Controller {
     }
     public void mostraPainelClip(){
         this.pnlCurva.setVisible(false);
+        this.pnl3D.setVisible(false);
         this.pnlClip.setVisible(true);
         this.desenhaBorda();
     }
     public void mostraPainelCurva(){
         this.pnlClip.setVisible(false);
+        this.pnl3D.setVisible(false);
         this.pnlCurva.setVisible(true);
         this.desenhaBorda();
 
@@ -209,7 +224,7 @@ public class Controller {
                 poligono.desenhaCanvas(canvasFx, mundo, Vp, algoritimoDesenho());
                 //mostraPoligonos("Poligono ");
             }
-            capMouse.setText(String.valueOf(event.getButton()));
+            // capMouse.setText(String.valueOf(event.getButton()));
         });
 
     }
@@ -380,6 +395,44 @@ public class Controller {
             dialogoInfo.showAndWait();
         }
 
+    }
+    public void gravaPoligonos3D(){
+        poligono3D = new Poligono3D(new LinkedList<Ponto2D>(),new LinkedList<>());
+        displayFile3D = new DisplayFile3D(new LinkedList<>(),new LinkedList<>());
+        String arquivo = comBox3D.getSelectionModel().getSelectedItem().toString();
+        System.out.println(arquivo);
+        File file = new File(System.getProperty("user.dir")+"\\src\\sample\\txt\\"+arquivo+".txt");
+        try {
+            FileReader reader = new FileReader(file);
+            BufferedReader input = new BufferedReader(reader);
+            String linha,texto = arquivo;
+            String valor[];
+            while ((linha = input.readLine()) != null) {
+               // System.out.println(linha.length());
+                if(linha!=null && linha.length()>0){
+                    valor = linha.split(" ");
+                    poligono3D.getListaDePontos3d().add(new Ponto3D(Double.valueOf(valor[0]),Double.valueOf(valor[1]),Double.valueOf(valor[2])));
+                }
+
+               // texto += linha+"\n";
+            }
+            input.close();
+            displayFile3D.gravaPoligono(poligono3D);
+            txtAreaPontos3D.setText(texto);
+            //poligono3D.rotacionarPoligono(10,1);
+            //poligono3D.rotacionarPoligono(10,2);
+
+            poligono3D.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+
+        } catch (IOException ioe) {
+            System.out.println(ioe);
+        }
+    }
+    public void montaComboBox3d(){
+        ObservableList<String> lista = FXCollections.observableArrayList();
+        lista.add("Piramide");
+        lista.add("Cubo");
+        comBox3D.setItems(lista);
     }
 
 }
