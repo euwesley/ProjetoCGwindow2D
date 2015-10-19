@@ -211,6 +211,96 @@ public class Poligono {
         return new Ponto2D(cX, cY);
     }
 
+       /* ------- SISTEMAS DE COORDENADAS HOMOGÊNEAS -------*/
+
+
+    private double[][] matrizTranslacao(double Dx, double Dy){
+        double translacao[][] =  {{1, 0, 0},
+                {0, 1, 0},
+                {Dx, Dy, 1}};
+        return translacao;
+    }
+
+    private double[][] matrizEscalonamento(double Sx, double Sy){
+        double escalonamento[][] =  {{Sx, 0, 0},
+                {0, Sy, 0},
+                {0, 0, 1}};
+        return escalonamento;
+    }
+
+    private double[][] matrizRotacao(double angulo, Ponto2D centro){
+        double antes[][] = {{1, 0, 0},
+                {0, 1, 0},
+                {-centro.getCordenadaX(), -centro.getCordenadaY(), 1}};
+
+        double depois[][] = {{1, 0, 0},
+                {0, 1, 0},
+                {centro.getCordenadaX(), centro.getCordenadaY(), 1}};
+
+        double rotacao[][] =  {{(double)Math.cos(angulo), (double)Math.sin(angulo), 0},
+                {(double)-Math.sin(angulo), (double)Math.cos(angulo), 0},
+                {0, 0, 1}};
+        rotacao = multiplicaMatriz(antes,rotacao);
+        rotacao = multiplicaMatriz(rotacao, depois);
+        return rotacao;
+    }
+
+    private double[][] matrizReflecao(int tipo){
+        switch(tipo){
+            case 1:
+                //No eixo X
+                double reflexaoX[][] = {{1, 0, 0},
+                        {0, -1, 0},
+                        {0, 0, 1}};
+
+                return reflexaoX;
+            case 2:
+                // No eixo Y
+                double reflexaoY[][] = {{-1, 0, 0},
+                        {0, 1, 0},
+                        {0, 0, 1}};
+                return reflexaoY;
+            case 3:
+                // No eixo XY
+                double reflexaoXY[][] = {{-1, 0, 0},
+                        {0, -1, 0},
+                        {0, 0, 1}};
+                return reflexaoXY;
+        }
+        return null;
+    }
+
+
+    private double[][] multiplicaMatriz(double a[][], double b[][]) {
+        double c[][] = new double[a.length][b[0].length];
+
+        for (int i = 0; i < a.length; i++) { //Linha
+            for (int j = 0; j < b[i].length; j++) { //Coluna
+                double aux = 0;
+                for (int z = 0; z < a[0].length; z++) {
+                    //Aqui acontece a multiplicacao
+                    aux += a[i][z] * b[z][j];
+                }
+                c[i][j] = aux;
+            }
+        }
+        return c;
+    }
+
+    public void mostraMatriz(double a[][]) {
+        //Aqui calcula a matriz C, que é a multiplicacao da matrizHemite X vetorGeometrico
+        System.out.println("---- Matriz ----");
+        for (double[] a1 : a) {
+            //Linha
+            for (int j = 0; j < a1.length; j++) {
+                //Coluna
+                System.out.println(a1[j] + "\t");
+            }
+            System.out.println("\n");
+        }
+        System.out.println("---- Fim Matriz ----");
+    }
+
     public void transladarPoligono(double dx,double dy){
         for(int i=0;i<this.listaDePontos.size();i++){
             this.listaDePontos.get(i).pontoTransladado(dx,dy);
@@ -246,7 +336,7 @@ public class Poligono {
         Casteljau curva = new Casteljau(getListaPontos());
         this.listaDePontos = curva.geraListaCurva();
     }
-    public Ponto2D[][] multiplicaMatriz(float a[][], Ponto2D b[][]) {
+    public Ponto2D[][] multiplicaMatriz(double a[][], Ponto2D b[][]) {
         //Aqui calcula a matriz C, que é a multiplicacao da matrizHemite X vetorGeometrico
         Ponto2D c[][] = new Ponto2D[a.length][b[0].length];
 
@@ -278,7 +368,7 @@ public class Poligono {
 
 
 
-        final float matrizHemite[][] = {{2, -2, 1, 1},
+        final double matrizHemite[][] = {{2, -2, 1, 1},
                 {-3, 3, -2, -1},
                 {0, 0, 1, 0},
                 {1, 0, 0, 0}};
@@ -288,9 +378,9 @@ public class Poligono {
                 {r4}};
         Ponto2D c[][] = multiplicaMatriz(matrizHemite, vetorGeometrico);
         //listaPontosAux().clear();
-        float soma = (float)1/t;
-        for (float x = 0; x <= 1;x += soma) {
-            float T[][] = {{(float) Math.pow(x, 3) ,(float)  Math.pow(x, 2) , x, 1}};
+        double soma = (double)1/t;
+        for (double x = 0; x <= 1;x += soma) {
+            double T[][] = {{(double) Math.pow(x, 3) ,(double)  Math.pow(x, 2) , x, 1}};
             Ponto2D pd[][] = multiplicaMatriz(T, c);
             for (int i = 0; i < pd.length; i++) { //Linha
                 for (int j = 0; j < pd[i].length; j++) { //Coluna
@@ -308,7 +398,7 @@ public class Poligono {
         Ponto2D p2 = getListaPontos().get(2);
         Ponto2D p3 = getListaPontos().get(3);
 
-        final float[][] matrizBezier = {{-1, 3, -3, 1},
+        final double[][] matrizBezier = {{-1, 3, -3, 1},
                 {3, -6, 3, 0},
                 {-3, 3, 0, 0},
                 {1, 0, 0, 0}};
@@ -318,9 +408,9 @@ public class Poligono {
                 {p3}};
         Ponto2D c[][] = multiplicaMatriz(matrizBezier, vetorGeometrico);
 
-        float soma = (float)1/t;
-        for (float x = 0; x <= 1;x += soma) {
-            float T[][] = {{(float) Math.pow(x, 3) ,(float)  Math.pow(x, 2) , x, 1}};
+        double soma = (double)1/t;
+        for (double x = 0; x <= 1;x += soma) {
+            double T[][] = {{(double) Math.pow(x, 3) ,(double)  Math.pow(x, 2) , x, 1}};
             Ponto2D pd[][] = multiplicaMatriz(T, c);
             for (int i = 0; i < pd.length; i++) { //Linha
                 for (int j = 0; j < pd[i].length; j++) { //Coluna
@@ -336,18 +426,18 @@ public class Poligono {
         Ponto2D p1 = getListaPontos().get(1);
         Ponto2D p2 = getListaPontos().get(2);
         Ponto2D p3 = getListaPontos().get(3);
-        final float[][] matrizBsplines = {{(float)-1/6, (float)3/6, (float)-3/6, (float)1/6},
-                {(float)3/6, (float)-6/6, (float)3/6, 0},
-                {(float)-3/6, 0, (float)3/6, 0},
-                {(float)1/6, (float)4/6, (float)1/6, 0}};
+        final double[][] matrizBsplines = {{(double)-1/6, (double)3/6, (double)-3/6, (double)1/6},
+                {(double)3/6, (double)-6/6, (double)3/6, 0},
+                {(double)-3/6, 0, (double)3/6, 0},
+                {(double)1/6, (double)4/6, (double)1/6, 0}};
         Ponto2D vetorGeometrico[][] = {{p0},
                 {p1},
                 {p2},
                 {p3}};
         Ponto2D c[][] = multiplicaMatriz(matrizBsplines, vetorGeometrico);
-        float soma = (float)1/t;
-        for (float x = 0; x <= 1;x += soma) {
-            float T[][] = {{(float) Math.pow(x, 3) ,(float)  Math.pow(x, 2) , x, 1}};
+        double soma = (double)1/t;
+        for (double x = 0; x <= 1;x += soma) {
+            double T[][] = {{(double) Math.pow(x, 3) ,(double)  Math.pow(x, 2) , x, 1}};
             Ponto2D pd[][] = multiplicaMatriz(T, c);
             for (int i = 0; i < pd.length; i++) { //Linha
                 for (int j = 0; j < pd[i].length; j++) { //Coluna

@@ -32,13 +32,15 @@ public class Controller {
     @FXML
     protected ComboBox comBox3D;
     @FXML
+    protected CheckBox ckb3DX,ckb3DY,ckb3DZ;
+    @FXML
     protected Label lblX,lblY,lblX2,lblY2;
     @FXML
     protected TextField txtXmin,txtXmax,txtYmin,txtYmax,txtXc,txtYc,txtR,txtAngulo,txtEscY,txtEscX;
     @FXML
-    protected TextField txtMovY,txtMovX,txtYreta,txtXreta,txtNPontos;
+    protected TextField txtMovY,txtMovX,txtYreta,txtXreta,txtNPontos,txtAngulo3D,txtEscala3D;
     @FXML
-    protected TextArea txtAreaPontos3D;
+    protected TextField txtMov3DX,txtMov3DY,txtMov3DZ;
     @FXML
     protected TreeView treeTeste;
     @FXML
@@ -46,7 +48,7 @@ public class Controller {
     @FXML
     protected StackPane plStack;
     @FXML
-    protected ToggleGroup rbGroup,rbPoligono;
+    protected ToggleGroup rbGroup,rbPoligono,rbRotacao3D;
     @FXML
     protected Slider brScalaMundo;
 
@@ -81,11 +83,22 @@ public class Controller {
         this.desenhaBorda();
 
     }
+    public void mostraPainel3D(){
+        this.pnlClip.setVisible(false);
+        this.pnl3D.setVisible(true);
+        this.pnlCurva.setVisible(false);
+        this.desenhaBorda();
+
+    }
     public void inicioPrograma(){
         this.desenhaBorda();
     }
     public String algoritimoDesenho(){
         radioButton = (RadioButton)rbGroup.getSelectedToggle();
+        return radioButton.getId();
+    }
+    public String eixoDeRotacao3D(){
+        radioButton = (RadioButton)rbRotacao3D.getSelectedToggle();
         return radioButton.getId();
     }
     public String tipoPoligono(){
@@ -108,11 +121,15 @@ public class Controller {
         retaX.getListaPontos().add(xMax);
         retaY.getListaPontos().add(yMin);
         retaY.getListaPontos().add(yMax);
-
-        retaX.desenhaCanvas(canvasFx, this.mundo, this.Vp, algoritimoDesenho());
-        retaY.desenhaCanvas(canvasFx,this.mundo,this.Vp, algoritimoDesenho());
-        if(displayFile != null){
+        if(!this.pnl3D.isVisible()) {
+            retaX.desenhaCanvas(canvasFx, this.mundo, this.Vp, algoritimoDesenho());
+            retaY.desenhaCanvas(canvasFx, this.mundo, this.Vp, algoritimoDesenho());
+        }
+        if(displayFile != null && !pnl3D.isVisible()){
             displayPoligonos();
+        }
+        if(displayFile3D !=null && this.pnl3D.isVisible()){
+            displayPoligono3D();
         }
         if(this.pnlClip.isVisible()){
             this.desenhaJanela(janelaClip);
@@ -135,6 +152,11 @@ public class Controller {
     public void displayPoligonos(){
         for (int i = 0; i <displayFile.getListaPoligonos().size() ; i++) {
             displayFile.getListaPoligonos().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
+        }
+    }
+    public void displayPoligono3D(){
+        for (int i = 0; i < displayFile3D.getListaPoligono3D().size() ; i++) {
+            displayFile3D.getListaPoligono3D().get(i).desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
         }
     }
     public void desenhaJanela(Janela janela){
@@ -418,15 +440,58 @@ public class Controller {
             }
             input.close();
             displayFile3D.gravaPoligono(poligono3D);
-            txtAreaPontos3D.setText(texto);
-            //poligono3D.rotacionarPoligono(10,1);
-            //poligono3D.rotacionarPoligono(10,2);
+            //txtAreaPontos3D.setText(texto);
 
             poligono3D.desenhaCanvas(canvasFx,mundo,Vp,algoritimoDesenho());
 
         } catch (IOException ioe) {
             System.out.println(ioe);
         }
+    }
+    public void rotacionar3D(){
+        poligono3D.rotacionarPoligono(Double.valueOf(this.txtAngulo3D.getText()),eixoDeRotacao3D());
+
+       desenhaBorda();
+    }
+    public void escalonar3D(){
+        double dX=0,dY=0,dZ=0;
+        if(this.ckb3DX.isSelected()){
+            dX = Double.valueOf(txtEscala3D.getText());
+        }else {
+            dX=1;
+        }
+        if(this.ckb3DY.isSelected()){
+            dY=Double.valueOf(txtEscala3D.getText());
+        }else{
+            dY=1;
+        }
+        if(this.ckb3DZ.isSelected()){
+            dZ=Double.valueOf(txtEscala3D.getText());
+        }else {
+            dZ=1;
+        }
+        poligono3D.escalonarPoligono3D(dX,dY,dZ);
+        desenhaBorda();
+    }
+    public void transladar3D(){
+        double mdx,mdy,mdz;
+        if(!this.txtMov3DX.getText().isEmpty()){
+            mdx = Double.valueOf(this.txtMov3DX.getText());
+        }else{
+            mdx = 0;
+        }
+        if(!this.txtMov3DY.getText().isEmpty()){
+            mdy = Double.valueOf(this.txtMov3DY.getText());
+        }else{
+            mdy = 0;
+        }
+        if(!this.txtMov3DZ.getText().isEmpty()){
+            mdz = Double.valueOf(this.txtMov3DZ.getText());
+        }else{
+            mdz = 0;
+        }
+        poligono3D.transladarPoligono3D(mdx,mdy,mdz);
+        desenhaBorda();
     }
     public void montaComboBox3d(){
         ObservableList<String> lista = FXCollections.observableArrayList();

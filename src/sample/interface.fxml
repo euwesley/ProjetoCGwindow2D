@@ -203,7 +203,7 @@
                   <Label layoutX="20.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" Funções " />
                   <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelClip" text="Cliping" />
                   <Button layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainelCurva" text="Curvas" />
-                  <Button layoutX="146.0" layoutY="14.0" mnemonicParsing="false" onAction="#montaComboBox3d" text="3D" />
+                  <Button layoutX="146.0" layoutY="14.0" mnemonicParsing="false" onAction="#mostraPainel3D" text="3D" />
                   <Button layoutX="213.0" layoutY="60.0" mnemonicParsing="false" onAction="#reinicia" text="Limpar canvas" />
                </children>
             </Pane>
@@ -218,7 +218,55 @@
                   <Label layoutX="14.0" layoutY="-8.0" style="-fx-background-color: cornsilk;" text=" 3D " />
                   <ComboBox fx:id="comBox3D" layoutX="14.0" layoutY="14.0" onMouseClicked="#montaComboBox3d" prefWidth="150.0" promptText="Selecione o Objeto" />
                   <Button layoutX="178.0" layoutY="14.0" mnemonicParsing="false" onAction="#gravaPoligonos3D" text="Carregar" />
-                  <TextArea fx:id="txtAreaPontos3D" layoutX="14.0" layoutY="46.0" prefHeight="99.0" prefWidth="310.0" />
+                  <TabPane layoutY="54.0" prefHeight="99.0" prefWidth="343.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Rotação">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <RadioButton fx:id="rb3D1" layoutX="23.0" layoutY="6.0" mnemonicParsing="false" text="Eixo X">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="rbRotacao3D" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rb3D2" layoutX="23.0" layoutY="27.0" mnemonicParsing="false" text="Eixo Y" toggleGroup="$rbRotacao3D" />
+                                    <RadioButton fx:id="rb3D3" layoutX="23.0" layoutY="47.0" mnemonicParsing="false" text="Eixo Z" toggleGroup="$rbRotacao3D" />
+                                    <TextField fx:id="txtAngulo3D" layoutX="99.0" layoutY="23.0" prefHeight="25.0" prefWidth="57.0" text="5" />
+                                    <Label layoutX="108.0" layoutY="6.0" text="Ângulo" />
+                                    <Button layoutX="172.0" layoutY="23.0" mnemonicParsing="false" onAction="#rotacionar3D" text="Rotacionar" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Escalonar">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <CheckBox fx:id="ckb3DX" layoutX="14.0" layoutY="6.0" mnemonicParsing="false" text="X" />
+                                    <CheckBox fx:id="ckb3DY" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" text="Y" />
+                                    <CheckBox fx:id="ckb3DZ" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Z" />
+                                    <TextField fx:id="txtEscala3D" layoutX="70.0" layoutY="23.0" prefHeight="25.0" prefWidth="92.0" text="0.5" />
+                                    <Button layoutX="195.0" layoutY="23.0" mnemonicParsing="false" onAction="#escalonar3D" text="Escalonar" />
+                                    <Label layoutX="100.0" layoutY="6.0" text="Escala" />
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab text="Mover">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="21.0" layoutY="14.0" text="Eixo X" />
+                                    <Label layoutX="75.0" layoutY="14.0" text="Eixo Y" />
+                                    <Label layoutX="131.0" layoutY="14.0" text="Eixo Z" />
+                                    <TextField fx:id="txtMov3DX" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="46.0" />
+                                    <TextField fx:id="txtMov3DY" layoutX="68.0" layoutY="35.0" prefHeight="25.0" prefWidth="46.0" />
+                                    <TextField fx:id="txtMov3DZ" layoutX="123.0" layoutY="35.0" prefHeight="25.0" prefWidth="49.0" />
+                                    <Button layoutX="204.0" layoutY="23.0" mnemonicParsing="false" onAction="#transladar3D" text="Mover" />
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
                </children>
             </Pane>
          </children>

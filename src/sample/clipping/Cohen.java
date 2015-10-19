@@ -81,6 +81,7 @@ public class Cohen {
         double yE,yD,xT,xB,x,y;
         Ponto2D direita,esquerda,topo,fundo;
         boolean areaX,areaY;
+      // Calculo X com baze no coeficiente e defino se eh Ymin ou Ymax
         areaX = (xmin < pontoS.getCordenadaX() && pontoS.getCordenadaX() < xmax);
         areaY = (ymin < pontoS.getCordenadaY() && pontoS.getCordenadaY() < ymax);
 
@@ -96,6 +97,7 @@ public class Cohen {
                 auxPontos.add(fundo);
             }
         }
+        // Calculo Y com baze no coeficiente e defino se eh Xmin ou Xmax
         if(!areaX && areaY){
             yE = (m*(xmin - pontoS.getCordenadaX()))+pontoS.getCordenadaY();
             yD = (m*(xmax - pontoS.getCordenadaX()))+pontoS.getCordenadaY();
@@ -108,6 +110,7 @@ public class Cohen {
                 auxPontos.add(direita);
             }
         }
+        // Calculo novo ponto baseado no coeficiente e nas areas diagonais
         if(!areaX && !areaY){
             xT = (pontoS.getCordenadaX()+((1/m)*(ymax - pontoS.getCordenadaY())));
             xB = (pontoS.getCordenadaX()+((1/m)*(ymin - pontoS.getCordenadaY())));
@@ -133,7 +136,7 @@ public class Cohen {
         }
     }
     public List<Ponto2D> CohenSutherlandLineClip(Ponto2D p1, Ponto2D p2){
-        List<Ponto2D> auxPontos = new LinkedList<Ponto2D>();
+        List<Ponto2D> auxPontos = new LinkedList<>();
         int outcode0 = ComputeOutCode(p1.getCordenadaX(), p1.getCordenadaY());
         int outcode1 = ComputeOutCode(p2.getCordenadaX(), p2.getCordenadaY());
        /* String bin1 = Integer.toString(outcode0, 2);

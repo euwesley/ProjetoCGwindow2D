@@ -91,14 +91,37 @@ public class Poligono3D extends Poligono {
         return super.getCentro();
     }
 
-    @Override
-    public void transladarPoligono(double dx, double dy) {
-        super.transladarPoligono(dx, dy);
+
+    public void transladarPoligono3D(double dx, double dy, double dz) {
+        for (int x = 0; x < listaDePontos3d.size(); x++) {
+            Ponto3D vertice = listaDePontos3d.get(x);
+            double matrizTranslacao[][] = matrizTranslacao(dx, dy, dz);
+            double matrizPonto3D[][] = {{vertice.getCordenadaX()},
+                    {vertice.getCordenadaY()},
+                    {vertice.getCordenadaZ()},
+                    {1}};
+            matrizPonto3D = multiplicaMatriz(matrizTranslacao, matrizPonto3D);
+            this.listaDePontos3d.get(x).setCordenadaX(matrizPonto3D[0][0]);
+            this.listaDePontos3d.get(x).setCordenadaY(matrizPonto3D[1][0]);
+            this.listaDePontos3d.get(x).setCordenadaZ(matrizPonto3D[2][0]);
+        }
     }
 
-    @Override
-    public void escalonarPoligono(double dx, double dy) {
-        super.escalonarPoligono(dx, dy);
+
+    public void escalonarPoligono3D(double dx, double dy, double dz) {
+
+        for (int x = 0; x < listaDePontos3d.size();x++) {
+            Ponto3D vertice = listaDePontos3d.get(x);
+            double matrizEscalonamento[][] = matrizEscalonamento(dx, dy, dz);
+            double matrizPonto3D[][] = { {vertice.getCordenadaX()},
+                    {vertice.getCordenadaY()},
+                    {vertice.getCordenadaZ()},
+                    {1}};
+            matrizPonto3D = multiplicaMatriz(matrizEscalonamento,matrizPonto3D);
+            this.listaDePontos3d.get(x).setCordenadaX(matrizPonto3D[0][0]);
+            this.listaDePontos3d.get(x).setCordenadaY(matrizPonto3D[1][0]);
+            this.listaDePontos3d.get(x).setCordenadaZ(matrizPonto3D[2][0]);
+        }
     }
 
     /* ------- SISTEMAS DE COORDENADAS HOMOGÊNEAS -------*/
@@ -120,7 +143,7 @@ public class Poligono3D extends Poligono {
         return escalonamento;
     }
 
-    private double[][] matrizRotacao(double angulo, Ponto3D centro, int tipoEixo) {
+    private double[][] matrizRotacao(double angulo, Ponto3D centro, String tipoEixo) {
         double antes[][] = {{1, 0, 0, 0},
                 {0, 1, 0, 0},
                 {0, 0, 1, 0},
@@ -133,14 +156,14 @@ public class Poligono3D extends Poligono {
 
         double rotacao[][] = null;
         switch (tipoEixo) {
-            case 1: //Eixo X
+            case "rb3D1": //Eixo X
                 double rotacaoX[][] = {{1, 0, 0, 0},
                         {0,  Math.cos(angulo), Math.sin(angulo), 0},
                         {0,  -Math.sin(angulo), Math.cos(angulo), 0},
                         {0, 0, 0, 1}};
                 rotacao = rotacaoX;
                 break;
-            case 2: // Eixo Y
+            case "rb3D2": // Eixo Y
                 double rotacaoY[][] = {{ Math.cos(angulo), 0,  -Math.sin(angulo), 0},
                         {0, 1, 0, 0},
                         {Math.sin(angulo), 0, Math.cos(angulo), 0},
@@ -148,7 +171,7 @@ public class Poligono3D extends Poligono {
                 rotacao = rotacaoY;
                 break;
 
-            case 3: // Eixo Z
+            case "rb3D3": // Eixo Z
                 double rotacaoZ[][] = {{ Math.cos(angulo),Math.sin(angulo), 0, 0},
                         {-Math.sin(angulo),Math.cos(angulo), 0, 0},
                         {0, 0, 1, 0},
@@ -210,23 +233,19 @@ public class Poligono3D extends Poligono {
         return aux;
     }
 
-    public void rotacionarPoligono(double angulo,int i) {
+    public void rotacionarPoligono(double angulo,String eixo) {
         Ponto3D centro = meioPoligono3D();
         for (int x = 0; x < listaDePontos3d.size(); x++) {
             Ponto3D vertice = listaDePontos3d.get(x);
-            double matrizRotacao[][] = matrizRotacao(angulo, centro, i);
+            double matrizRotacao[][] = matrizRotacao(angulo, centro, eixo);
             double matrizPonto3D[][] = {{vertice.getCordenadaX()},
                     {vertice.getCordenadaY()},
                     {vertice.getCordenadaZ()},
                     {1}};
             matrizPonto3D = multiplicaMatriz(matrizRotacao, matrizPonto3D);
-
-            System.out.println("Rotacao = " + x);
-            System.out.println("Antes - " + listaDePontos3d.get(x).toString());
             this.listaDePontos3d.get(x).setCordenadaX(matrizPonto3D[0][0]);
             this.listaDePontos3d.get(x).setCordenadaY(matrizPonto3D[1][0]);
             this.listaDePontos3d.get(x).setCordenadaZ(matrizPonto3D[2][0]);
-            System.out.println("Depois - " + listaDePontos3d.get(x).toString());
         }
     }
 
